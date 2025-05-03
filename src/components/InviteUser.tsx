@@ -8,11 +8,6 @@ import styles from '../styles/main-page.module.css';
 
 const InviteSection = () => {
 
-
-
-
-    const [channels, setChannels] = useState<Channel[]>([]);
-    const [userData, setUserData] = useState<UserData | null>(null);
     const [referralLink, referralLinkData] = useState<string>("");
     const invitedFriends = 3;
 
@@ -21,14 +16,8 @@ const InviteSection = () => {
         const fetchData = async () => {
         try {
             
-            
-        
-            const channelsData = await apiService.getChannels('user-123');
-            setChannels(channelsData);
-            
-            const userData = await apiService.getUserData('user-123');
-            setUserData(userData);
-            
+            const userData = await apiService.getUserData('user-123', 'event-123');
+            // setUserData(userData);            
             referralLinkData(userData.referralLink);
 
         } catch (error) {
