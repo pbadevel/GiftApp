@@ -1,0 +1,51 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+
+import Checkmark from '@/components/CheckMark';
+import RaffleTimer from '@/components/Timer';
+import Tickets from '@/components/TicketCard';
+import InviteSection from '@/components/InviteUser';
+
+import { apiService, UserData, Channel } from '@/utils/api';
+
+import styles from '../styles/main-page.module.css';
+
+
+interface Ticket {
+  id: string;
+  number: string;
+  createdAt: string;
+}
+
+
+
+
+
+export default function GiveawayInterface() {
+
+    return (
+        <div className={styles.container}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.contentWrapper}>
+                
+                <Checkmark />
+                
+                <div className={styles.headerSection}>
+                    
+                    <h1 className={styles.mainTitle}>Вы учавствуете в розыгрыше!</h1>
+                    <div className={styles.warningBox}> ⚠️ Не отписывайтесь от каналов! Вы вылетите из розыгрыша! </div>
+                    
+                    <RaffleTimer />
+                    
+                    <div className={styles.subTitle}>До завершения</div>
+                </div>
+                    
+                <button className={styles.infoButton}>Подробнее о розыгрыше</button>
+                    
+                <InviteSection />
+                <Tickets />
+
+            </motion.div>
+        </div>
+    );
+
+}
