@@ -15,7 +15,7 @@ const Tickets = () => {
         const fetchData = async () => {
         try {
             
-            const userData = await apiService.getUserTickets('user-123');
+            const userData = await apiService.getUserTickets('1060834219');
             setTickets(userData.tickets);
 
         } catch (error) {

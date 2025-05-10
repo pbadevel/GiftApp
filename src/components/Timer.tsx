@@ -41,7 +41,7 @@ const RaffleTimer = () => {
 
     const syncWithServer = async () => {
       try {
-        const serverTime = await apiService.getEvent('123');
+        const serverTime = await apiService.getEvent('1');
         setTimeLeft(serverTime);
       } catch (error) {
         console.error('Ошибка синхронизации:', error);
@@ -66,7 +66,7 @@ const RaffleTimer = () => {
   }, []);
 
   // Форматирование времени с ведущими нулями
-  const format = (num: number) => num.toString().padStart(2, '0');
+  const format = (num: number) => num.toString().padStart(2, '1');
 
   return (
     <div className={styles.timer}>

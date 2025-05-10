@@ -16,9 +16,9 @@ const InviteSection = () => {
         const fetchData = async () => {
         try {
             
-            const userData = await apiService.getUserData('user-123', 'event-123');
-            // setUserData(userData);            
+            const userData = await apiService.getUserData('1060834219', '1');           
             referralLinkData(userData.referralLink);
+            
 
         } catch (error) {
             console.error(error);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import Image from 'next/image';
 import Checkmark from '@/components/CheckMark';
 import RaffleTimer from '@/components/Timer';
 import Tickets from '@/components/TicketCard';
@@ -31,8 +31,15 @@ export default function GiveawayInterface() {
     const fetchInitialData = async () => {
       try {
 
-        const subscriptionResponse = await apiService.checkSubscriptions('123');
+        const subscriptionResponse = await apiService.checkSubscriptions('1060834219', '1');
 
+        const updatedChannels = channels.map(channel => ({
+          ...channel,
+          isSubscribed: subscriptionResponse.details.find(
+            d => d.channelId === channel.channelId
+          )?.isSubscribed || false
+        }));
+  
         console.log(subscriptionResponse)
 
         setChannels(subscriptionResponse.details);
@@ -50,18 +57,20 @@ export default function GiveawayInterface() {
   }, []);
 
 
+
   // Проверка подписок
-  const checkSubscriptions = async () => {
+  const checkSubscriptionsOnSite = async () => {
     setIsChecking(true);
     try {
       const result = await apiService.checkSubscriptions(
-        '123'
+        '1060834219',
+        '1'
       );
 
       const updatedChannels = channels.map(channel => ({
         ...channel,
         isSubscribed: result.details.find(
-          d => d.channelId === channel.id
+          d => d.channelId === channel.channelId
         )?.isSubscribed || false
       }));
 
@@ -137,35 +146,42 @@ export default function GiveawayInterface() {
             {channels.map((channel) => (
               !channel.isSubscribed && (
                 <motion.div
-                  key={channel.id}
+                  key={channel.channelId}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={styles.channelCard}
                 >
                   <div className={styles.channelInfo}>
-                    <h3>{channel.name}</h3>
-                    <a
-                      href={channel.url}
+                      <Image
+                        src={channel.image_data}
+                        alt={channel.channelName}
+                        width={80}
+                        height={80}
+                        className={styles.avatar}
+                      />
+                    <h3>{channel.channelName}</h3>
+                    {/* <a
+                      href={channel.channelUrl || '#'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.channelLink}
                     >
                       Перейти к каналу
-                    </a>
+                    </a> */}
                   </div>
-                  <button
-                    // onClick={() => handleSubscribe(channel.id)}
+                  <a
                     className={styles.subscribeButton}
-                    disabled={channel.isSubscribed}
+                    target='_blank'
+                    href={channel.channelUrl}
                   >
                     {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
-                  </button>
+                  </a>
                 </motion.div>
               )
             ))}
             
             <button
-              onClick={checkSubscriptions}
+              onClick={checkSubscriptionsOnSite}
               className={styles.checkButton}
               disabled={isChecking}
             >

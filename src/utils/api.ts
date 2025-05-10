@@ -3,11 +3,20 @@ import axios from 'axios';
 
 // Типы данных
 export interface Channel {
-  id: string;
-  name: string;
-  url: string;
+  channelId: string;
+  image_data?: string;
+  channelName: string;
+  channelUrl: string;
   isSubscribed: boolean;
 }
+
+export interface Winner {
+  id: number;
+  ticket: string;
+  name: string;
+  image_url: string;
+}
+
 
 export interface UserData {
   id: string;
@@ -65,6 +74,20 @@ export const apiService = {
     }
   },
 
+  getWinners: async (eventId: string): Promise<Winner[]> => {
+    try {
+      const response = await api.get(`/getWinners/${eventId}`);
+      if (response.data.ok) {
+        return response.data.result;
+      }
+
+      return response.data.ok
+
+    } catch (error) {
+      throw new Error('Get Winners failed');
+    }
+  },
+
   // Получение данных пользователя
   getUserData: async (userId: string, eventId: string): Promise<UserData> => {
     try {
@@ -85,9 +108,9 @@ export const apiService = {
   },
 
   // Проверка подписок
-  checkSubscriptions: async (userId: string): Promise<SubscriptionStatus> => {
+  checkSubscriptions: async (userId: string, eventId: string): Promise<SubscriptionStatus> => {
     try {
-      const response = await api.post(`/check-subscriptions/${userId}`);
+      const response = await api.post(`/check-subscriptions/${userId}-${eventId}`);
       return response.data;
     } catch (error) {
       throw new Error('Subscription check failed');
@@ -96,7 +119,7 @@ export const apiService = {
 
   getEvent: async (eventId: string): Promise<EventEndedAt> => {
     try {
-      const response = await api.post(`/getEvent/${eventId}`);
+      const response = await api.get(`/getEvent/${eventId}`);
       return response.data;
     } catch (error) {
       throw new Error('Get Event failed');

@@ -1,0 +1,74 @@
+
+@font-face {
+  font-family: 'Sans';
+  src: url('/fonts/Sans.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body {
+  font-family: 'Sans', sans-serif;
+}
+
+
+.container {
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+    background:  #ffffff;
+    color: rgb(0, 0, 0);
+  }
+  
+  .trophyContainer {
+    margin: 2rem auto;
+    max-width: 200px;
+  }
+  
+  .trophy {
+    width: 100%;
+    height: auto;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .winnersList {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #75747449;
+    box-shadow: 20px 20px 10px 0px #00000049;
+    border-radius: 10px;
+  }
+  
+  .winnerCard {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+  }
+  
+  .avatar {
+    border-radius: 50%;
+    margin-right: 1.5rem;
+    border: 2px solid gold;
+  }
+  
+  .winnerInfo {
+    text-align: left;
+  }
+  
+  .winnerInfo h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .winnerInfo p {
+    margin: 0.5rem 0 0;
+    color: #864040;
+  }

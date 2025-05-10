@@ -1,6 +1,14 @@
-/* styles/main.module.css */
+
+@font-face {
+  font-family: 'Sans';
+  src: url('/fonts/Sans.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 body {
+  font-family: 'Sans', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffffff !important;
@@ -258,7 +266,6 @@ body {
     border-radius: 5px;
     z-index: 1000;
   }
-  
   .channelsSection {
     max-width: 800px;
     margin: 0 auto;
@@ -273,11 +280,30 @@ body {
     margin: 1rem 0;
     background: #1f2937;
     border-radius: 8px;
+    gap: 1.5rem; /* Добавляем промежуток между элементами */
   }
   
   .channelInfo {
+    display: flex; /* Делаем контейнер flex */
+    align-items: center; /* Выравниваем элементы по вертикали */
+    gap: 1rem; /* Расстояние между элементами */
+    flex-wrap: wrap; /* Разрешаем перенос на маленьких экранах */
     flex-grow: 1;
   }
+  
+  /* .avatar {
+    flex-shrink: 0; 
+  }
+  
+  .channelLink {
+    white-space: nowrap;
+  }
+  
+  .subscribeButton {
+    white-space: nowrap;
+    padding: 0.5rem 1.5rem;
+    
+  } */
   
   .channelInfo h3 {
     margin: 0 0 0.5rem 0;
@@ -288,8 +314,14 @@ body {
     color: #c084fc;
     text-decoration: none;
   }
-  
+   
+  .avatar {
+    border-radius: 50%;
+    margin-right: 1.5rem;
+    border: 2px solid gold;
+  }
   .subscribeButton {
+    text-decoration: none;
     background: #9333ea;
     color: white;
     border: none;
