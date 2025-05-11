@@ -30,48 +30,65 @@ export default function GiveawayInterface() {
   // Загрузка начальных данных
   
   useEffect(() => {
-    if (eventId) {
-      // Сохраняем eventId в localStorage
-      localStorage.setItem('event_id', eventId as string);
-      setEventId(eventId as string)
-    }
-  }, []);
+    const initializeData = async () => {
+      try {
+        // Шаг 1: Получение eventId из URL
+        if (eventId && typeof eventId === 'string') {
+          localStorage.setItem('event_id', eventId);
+          setEventId(eventId);
+        } else {
+          throw new Error('Event ID not found in URL');
+        }
   
-  useEffect(() => {
-    // Проверяем, что приложение запущено внутри Telegram
-    if (typeof window.Telegram?.WebApp !== 'undefined') {
-      const tg = window.Telegram.WebApp;
-      tg.ready(); // Инициализация интерфейса
-
-      // Получаем данные пользователя
-      const user = tg.initDataUnsafe.user;
-      const userId = user?.id.toString();
-
-      localStorage.setItem('user_id', userId);
-
-      setUserId(userId);
-    }
-  }, []);
-
+        // Шаг 2: Получение userID из Telegram
+        if (typeof window.Telegram?.WebApp !== 'undefined') {
+          const tg = window.Telegram.WebApp;
+          await tg.ready();
+          
+          const user = tg.initDataUnsafe.user;
+          const userId = user?.id?.toString();
+          
+          if (!userId) throw new Error('Telegram user ID not found');
+          
+          localStorage.setItem('user_id', userId);
+          setUserId(userId);
+        } else {
+          throw new Error('Not running in Telegram context');
+        }
+  
+      } catch (error) {
+        console.error('Initialization error:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+  
+    initializeData();
+  }, [eventId]); // Зависимость от eventId
+  
+  // Эффект для загрузки данных после инициализации
   useEffect(() => {
     const fetchInitialData = async () => {
+      if (!userID || !eventID) return; // Ждем пока данные появятся
+      
       try {
-
+        setLoading(true);
         const subscriptionResponse = await apiService.checkSubscriptions(userID, eventID);
-
+        
         setChannels(subscriptionResponse.details);
         setAllSubscribed(subscriptionResponse.allSubscribed);
         
       } catch (err) {
-        console.error(err)
+        console.error(err);
         setError('Ошибка загрузки данных');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchInitialData();
-  }, []);
+  }, [userID, eventID]); // Срабатывает при изменении userID или eventID
+  
 
 
 
