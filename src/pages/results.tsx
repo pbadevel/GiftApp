@@ -23,27 +23,42 @@ export default function ResultsPage() {
 
 
   useEffect(() => {
-    if (eventId) {
-      // Сохраняем eventId в localStorage
-      localStorage.setItem('event_id', eventId as string);
-      setEventId(eventId as string)
-    }
-  }, [eventId]);
+    const initializeData = async () => {
+      try {
+        // Шаг 1: Получение eventId из URL
+        if (eventId && typeof eventId === 'string') {
+          localStorage.setItem('event_id', eventId);
+          setEventId(eventId);
+        } else {
+          // throw new Error('Event ID not found in URL');
+          console.log('faild to load eventId')
+        }
   
-  useEffect(() => {
-    // Проверяем, что приложение запущено внутри Telegram
-    if (typeof window.Telegram?.WebApp !== 'undefined') {
-      const tg = window.Telegram.WebApp;
-      tg.ready(); // Инициализация интерфейса
-
-      // Получаем данные пользователя
-      const user = tg.initDataUnsafe.user;
-      const userId = user?.id.toString();
-
-      localStorage.setItem('user_id', userId);
-
-    }
-  }, []);
+        // Шаг 2: Получение userID из Telegram
+        if (typeof window.Telegram?.WebApp !== 'undefined') {
+          const tg = window.Telegram.WebApp;
+          await tg.ready();
+          tg.expand(); // Растягивает приложение на весь экран
+          
+          const user = tg.initDataUnsafe.user;
+          const userId = user?.id?.toString();
+          
+          if (!userId) throw new Error('Telegram user ID not found');
+          
+          localStorage.setItem('user_id', userId);
+        } else {
+          throw new Error('Not running in Telegram context');
+        }
+  
+      } catch (error) {
+        console.error('Initialization error:', error);
+        
+      }
+    };
+  
+    initializeData();
+  }, [eventId]); // Зависимость от eventId
+  
 
   useEffect(() => {
     const fetchWinnerData = async () => {
@@ -58,7 +73,7 @@ export default function ResultsPage() {
       
     fetchWinnerData();
   
-  }, []);
+  }, [eventID]);
 
 
 

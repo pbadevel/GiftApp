@@ -45,6 +45,7 @@ export default function GiveawayInterface() {
         if (typeof window.Telegram?.WebApp !== 'undefined') {
           const tg = window.Telegram.WebApp;
           await tg.ready();
+          tg.expand(); // Растягивает приложение на весь экран
           
           const user = tg.initDataUnsafe.user;
           const userId = user?.id?.toString();
