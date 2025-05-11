@@ -14,8 +14,10 @@ import styles from '../styles/main-page.module.css';
 export default function GiveawayInterface() {
   const router = useRouter();
   const { eventId } = router.query; // Получаем параметр из URL
-  const [userID, setUserId] = useState<string>('1');
-  const [eventID, setEventId] = useState<string>('1');
+  console.log(router.query,eventId)
+
+  const [userID, setUserId] = useState<string>('');
+  const [eventID, setEventId] = useState<string>('');
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
