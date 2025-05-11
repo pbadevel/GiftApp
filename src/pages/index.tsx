@@ -35,7 +35,7 @@ export default function GiveawayInterface() {
       localStorage.setItem('event_id', eventId as string);
       setEventId(eventId as string)
     }
-  }, [eventId]);
+  }, []);
   
   useEffect(() => {
     // Проверяем, что приложение запущено внутри Telegram
@@ -71,7 +71,7 @@ export default function GiveawayInterface() {
     };
 
     fetchInitialData();
-  }, [userID, eventId]);
+  }, []);
 
 
 
