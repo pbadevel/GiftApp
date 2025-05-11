@@ -102,6 +102,8 @@ export default function GiveawayInterface() {
     }
   };
 
+  console.log(`userid=${userID}  eventid=${eventID}`)
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
