@@ -170,9 +170,11 @@ export default function GiveawayInterface() {
               <div className={styles.subTitle}>До завершения</div>
             </div>
             
-            <button className={styles.infoButton}>
+            {/* <a
+            href=''
+            className={styles.infoButton}>
               Подробнее о розыгрыше
-            </button>
+            </a> */}
             
             <InviteSection />
             <Tickets />
