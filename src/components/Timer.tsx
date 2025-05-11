@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 import { apiService, EventEndedAt } from '../utils/api';
+import { getLocalStorage } from '@/utils/LocalStorageUtils';
+
 
 import styles from '@/styles/main-page.module.css'
 
 
 const RaffleTimer = () => {
+
+  const eventID = getLocalStorage('event_id')
+
   const [timeLeft, setTimeLeft] = useState<EventEndedAt>({ 
     days: 0, 
     hours: 0, 
@@ -41,7 +46,7 @@ const RaffleTimer = () => {
 
     const syncWithServer = async () => {
       try {
-        const serverTime = await apiService.getEvent('1');
+        const serverTime = await apiService.getEvent(eventID as string);
         setTimeLeft(serverTime);
       } catch (error) {
         console.error('Ошибка синхронизации:', error);
