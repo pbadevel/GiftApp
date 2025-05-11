@@ -1,50 +1,65 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, number } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Checkmark from '@/components/CheckMark';
 import RaffleTimer from '@/components/Timer';
 import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
-import { apiService, UserData, Channel, SubscriptionStatus } from '@/utils/api';
+import { apiService, Channel } from '@/utils/api';
 
 import styles from '../styles/main-page.module.css';
-// import fstyles from '@/styles/follow.module.css'
 
-interface Ticket {
-  id: string;
-  number: string;
-  createdAt: string;
-}
 
 export default function GiveawayInterface() {
   const router = useRouter();
+  const { eventId } = router.query; // Получаем параметр из URL
+
+
   const [channels, setChannels] = useState<Channel[]>([]);
-//   const [userData, setUserData] = useState<UserData | null>(null);
   const [isChecking, setIsChecking] = useState(false);
   const [allSubscribed, setAllSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [userID, setUserId] = useState('');
+  const [eventID, setEventId] = useState('');
+
   // Загрузка начальных данных
+  
+  useEffect(() => {
+    if (eventId) {
+      // Сохраняем eventId в localStorage
+      localStorage.setItem('event_id', eventId as string);
+      setEventId(eventId as string)
+    }
+  }, [eventId]);
+  
+  useEffect(() => {
+    // Проверяем, что приложение запущено внутри Telegram
+    if (typeof window.Telegram?.WebApp !== 'undefined') {
+      const tg = window.Telegram.WebApp;
+      tg.ready(); // Инициализация интерфейса
+
+      // Получаем данные пользователя
+      const user = tg.initDataUnsafe.user;
+      const userId = user?.id.toString();
+
+      localStorage.setItem('user_id', userId);
+
+      setUserId(userId);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
 
-        const subscriptionResponse = await apiService.checkSubscriptions('1060834219', '1');
-
-        const updatedChannels = channels.map(channel => ({
-          ...channel,
-          isSubscribed: subscriptionResponse.details.find(
-            d => d.channelId === channel.channelId
-          )?.isSubscribed || false
-        }));
-  
-        console.log(subscriptionResponse)
+        const subscriptionResponse = await apiService.checkSubscriptions(userID, eventID);
 
         setChannels(subscriptionResponse.details);
         setAllSubscribed(subscriptionResponse.allSubscribed);
-        // setUserData(userDataResponse);
+        
       } catch (err) {
         console.error(err)
         setError('Ошибка загрузки данных');
@@ -54,7 +69,7 @@ export default function GiveawayInterface() {
     };
 
     fetchInitialData();
-  }, []);
+  }, [userID, eventId]);
 
 
 
@@ -63,8 +78,8 @@ export default function GiveawayInterface() {
     setIsChecking(true);
     try {
       const result = await apiService.checkSubscriptions(
-        '1060834219',
-        '1'
+        userID,
+        eventID
       );
 
       const updatedChannels = channels.map(channel => ({
@@ -160,14 +175,6 @@ export default function GiveawayInterface() {
                         className={styles.avatar}
                       />
                     <h3>{channel.channelName}</h3>
-                    {/* <a
-                      href={channel.channelUrl || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.channelLink}
-                    >
-                      Перейти к каналу
-                    </a> */}
                   </div>
                   <a
                     className={styles.subscribeButton}
