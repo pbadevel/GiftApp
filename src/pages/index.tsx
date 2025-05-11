@@ -14,6 +14,8 @@ import styles from '../styles/main-page.module.css';
 export default function GiveawayInterface() {
   const router = useRouter();
   const { eventId } = router.query; // Получаем параметр из URL
+  const [userID, setUserId] = useState('');
+  const [eventID, setEventId] = useState('');
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -22,8 +24,6 @@ export default function GiveawayInterface() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [userID, setUserId] = useState('');
-  const [eventID, setEventId] = useState('');
 
   // Загрузка начальных данных
   
