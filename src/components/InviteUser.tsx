@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import { Channel, UserData, apiService } from '@/utils/api';
-
+import { apiService } from '@/utils/api';
+import { getLocalStorage } from '@/utils/LocalStorageUtils';
 import styles from '../styles/main-page.module.css';
 
 
@@ -11,12 +11,15 @@ const InviteSection = () => {
     const [referralLink, referralLinkData] = useState<string>("");
     const invitedFriends = 3;
 
+    const userID = getLocalStorage('user_id')
+    const eventID = getLocalStorage('event_id')
+
     
     useEffect(() => {
         const fetchData = async () => {
         try {
             
-            const userData = await apiService.getUserData('1060834219', '1');           
+            const userData = await apiService.getUserData(userID as string, eventID as string);           
             referralLinkData(userData.referralLink);
             
 

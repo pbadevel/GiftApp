@@ -1,4 +1,7 @@
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { apiService, Winner } from '@/utils/api';
@@ -6,11 +9,59 @@ import styles from '../styles/results.module.css';
 
 import Trophy from '@/components/TrophySVG';
 
-interface Props {
-  winners: Winner[];
-}
+// interface Props {
+//   winners: Winner[];
+// }
 
-export default function ResultsPage({ winners }: Props) {
+export default function ResultsPage() {
+
+  const router = useRouter();
+  const { eventId } = router.query; // Получаем параметр из URL
+  
+  const [winners, setWinners] = useState<Winner[]>([]);
+  const [eventID, setEventId] = useState('');
+
+
+  useEffect(() => {
+    if (eventId) {
+      // Сохраняем eventId в localStorage
+      localStorage.setItem('event_id', eventId as string);
+      setEventId(eventId as string)
+    }
+  }, [eventId]);
+  
+  useEffect(() => {
+    // Проверяем, что приложение запущено внутри Telegram
+    if (typeof window.Telegram?.WebApp !== 'undefined') {
+      const tg = window.Telegram.WebApp;
+      tg.ready(); // Инициализация интерфейса
+
+      // Получаем данные пользователя
+      const user = tg.initDataUnsafe.user;
+      const userId = user?.id.toString();
+
+      localStorage.setItem('user_id', userId);
+
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchWinnerData = async () => {
+      try {
+        const winners = await apiService.getWinners(eventID);
+        setWinners(winners);
+      
+      } catch (error) {
+        console.error(error)
+      }
+    }
+      
+    fetchWinnerData();
+  
+  }, []);
+
+
+
   return (
     <div className={styles.container}>
       <motion.div 
@@ -51,12 +102,3 @@ export default function ResultsPage({ winners }: Props) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const winners = await apiService.getWinners('1');
-    return { props: { winners } };
-  } catch (error) {
-    return { props: { winners: [] } };
-  }
-};
