@@ -37,7 +37,8 @@ export default function GiveawayInterface() {
           localStorage.setItem('event_id', eventId);
           setEventId(eventId);
         } else {
-          throw new Error('Event ID not found in URL');
+          // throw new Error('Event ID not found in URL');
+          console.log('faild to load eventId')
         }
   
         // Шаг 2: Получение userID из Telegram
