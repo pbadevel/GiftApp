@@ -6,8 +6,23 @@
   font-style: normal;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
 
 body {
+  overscroll-behavior: none;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed; /* Фиксирует размеры для мобильных устройств */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
   font-family: 'Sans', sans-serif;
 }
 
