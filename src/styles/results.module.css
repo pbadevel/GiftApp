@@ -10,7 +10,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 body {
@@ -19,8 +19,8 @@ body {
   padding: 0;
   width: 100vw;
   min-height: 100vh;
-  position: fixed; /* Фиксирует размеры для мобильных устройств */
-  overflow-y: auto;
+  /* position: fixed; Фиксирует размеры для мобильных устройств */
+  /* overflow-y: auto; */
   -webkit-overflow-scrolling: touch;
 
   font-family: 'Sans', sans-serif;
