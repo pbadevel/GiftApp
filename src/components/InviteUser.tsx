@@ -9,7 +9,7 @@ import styles from '../styles/main-page.module.css';
 const InviteSection = () => {
 
     const [referralLink, referralLinkData] = useState<string>("");
-    const invitedFriends = 3;
+    const invitedFriends = 2;
 
     const userID = getLocalStorage('user_id')
     const eventID = getLocalStorage('event_id')
