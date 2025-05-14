@@ -12,19 +12,6 @@
   text-size-adjust: 100%;
 } */
 
-body {
-  overscroll-behavior: none;
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  min-height: 100vh;
-  /* position: fixed; Фиксирует размеры для мобильных устройств */
-  /* overflow-y: auto; */
-  -webkit-overflow-scrolling: touch;
-
-  font-family: 'Sans', sans-serif;
-}
-
 
 .container {
     min-height: 100vh;
