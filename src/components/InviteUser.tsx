@@ -53,7 +53,8 @@ const InviteSection = () => {
             document.execCommand('copy');
             showCopyFeedback();
           }
-        } catch (err) {
+        } catch (_err) {
+            console.error(_err)
             alert('Ваш браузер слишком старый!');
         } finally {
           // Удаляем временный элемент

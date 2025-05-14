@@ -21,29 +21,29 @@ const RaffleTimer = () => {
   const toSeconds = (t: EventEndedAt) => 
     t.days * 86400 + t.hours * 3600 + t.minutes * 60 + t.seconds;
 
-  // Функция для обновления времени
-  const tick = (prev: EventEndedAt) => {
-    const total = toSeconds(prev) - 1;
-    
-    if (total <= 0) return { 
-      days: 0, 
-      hours: 0, 
-      minutes: 0, 
-      seconds: 0 
-    };
-
-    return {
-      days: Math.floor(total / 86400),
-      hours: Math.floor((total % 86400) / 3600),
-      minutes: Math.floor((total % 3600) / 60),
-      seconds: total % 60
-    };
-  };
+  
 
   useEffect(() => {
     let syncInterval: NodeJS.Timeout;
     let timerInterval: NodeJS.Timeout;
-
+    const tick = (prev: EventEndedAt) => {
+      const total = toSeconds(prev) - 1;
+      
+      if (total <= 0) return { 
+        days: 0, 
+        hours: 0, 
+        minutes: 0, 
+        seconds: 0 
+      };
+  
+      return {
+        days: Math.floor(total / 86400),
+        hours: Math.floor((total % 86400) / 3600),
+        minutes: Math.floor((total % 3600) / 60),
+        seconds: total % 60
+      };
+    };
+    
     const syncWithServer = async () => {
       try {
         const serverTime = await apiService.getEvent(eventID as string);
@@ -68,7 +68,7 @@ const RaffleTimer = () => {
       clearInterval(timerInterval);
       clearInterval(syncInterval);
     };
-  }, [eventID, tick]);
+  }, [eventID]);
 
   // Форматирование времени с ведущими нулями
   const format = (num: number) => num.toString().padStart(2, '1');

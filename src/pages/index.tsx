@@ -59,7 +59,7 @@ export default function GiveawayInterface() {
         }
   
       } catch (_error) {
-        console.error('Initialization error:', error);
+        console.error('Initialization error:', _error);
         setError('Ошибка инициализации данных');
 
         setLoading(false);
@@ -117,7 +117,8 @@ export default function GiveawayInterface() {
       if (result.allSubscribed) {
         router.reload();
       }
-    } catch (err) {
+    } catch (_err) {
+      console.error(_err)
       setError('Ошибка проверки подписок');
     } finally {
       setIsChecking(false);
