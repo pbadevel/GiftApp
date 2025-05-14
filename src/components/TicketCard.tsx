@@ -11,8 +11,6 @@ const Tickets = () => {
     const [tickets, setTickets] = useState<Ticket[]>([]);
 
     const userID = getLocalStorage('user_id')
-    const eventID = getLocalStorage('event_id')
-
 
     
     useEffect(() => {
@@ -22,13 +20,13 @@ const Tickets = () => {
             const userData = await apiService.getUserTickets(userID as string);
             setTickets(userData.tickets);
 
-        } catch (error) {
-            console.error(error);
+        } catch (_error) {
+            console.error(_error);
         }
         };
         
         fetchData();
-    }, []);
+    }, [userID]);
     
     return (
     <div className={styles.ticketsSection}>

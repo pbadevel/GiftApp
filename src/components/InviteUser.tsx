@@ -23,13 +23,13 @@ const InviteSection = () => {
             referralLinkData(userData.referralLink);
             
 
-        } catch (error) {
-            console.error(error);
+        } catch (_error) {
+            console.error(_error);
         }
         };
         
         fetchData();
-    }, []);
+    }, [userID, eventID]);
 
 
     const copyReferralLink = () => {

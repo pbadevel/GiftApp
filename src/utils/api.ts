@@ -69,7 +69,8 @@ export const apiService = {
     try {
       const response = await api.get(`/channels/${userId}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Failed to fetch channels');
     }
   },
@@ -83,7 +84,8 @@ export const apiService = {
 
       return response.data.ok
 
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Get Winners failed');
     }
   },
@@ -93,7 +95,8 @@ export const apiService = {
     try {
       const response = await api.get(`/users/${userId}-${eventId}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Failed to fetch user data');
     }
   },
@@ -102,7 +105,8 @@ export const apiService = {
     try {
       const response = await api.get(`/tickets/${userId}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Failed to fetch tickets data');
     }
   },
@@ -112,7 +116,8 @@ export const apiService = {
     try {
       const response = await api.post(`/check-subscriptions/${userId}-${eventId}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Subscription check failed');
     }
   },
@@ -121,7 +126,8 @@ export const apiService = {
     try {
       const response = await api.get(`/getEvent/${eventId}`);
       return response.data;
-    } catch (error) {
+    } catch (_error) {
+      console.error(_error)
       throw new Error('Get Event failed');
     }
   },

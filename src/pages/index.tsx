@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, number } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Checkmark from '@/components/CheckMark';
@@ -58,9 +58,10 @@ export default function GiveawayInterface() {
           throw new Error('Not running in Telegram context');
         }
   
-      } catch (error) {
+      } catch (_error) {
         console.error('Initialization error:', error);
-        setError(error.message);
+        setError('Ошибка инициализации данных');
+
         setLoading(false);
       }
     };
@@ -80,8 +81,8 @@ export default function GiveawayInterface() {
         setChannels(subscriptionResponse.details);
         setAllSubscribed(subscriptionResponse.allSubscribed);
         
-      } catch (err) {
-        console.error(err);
+      } catch (_err) {
+        console.error(_err);
         setError('Ошибка загрузки данных');
       } finally {
         setLoading(false);
