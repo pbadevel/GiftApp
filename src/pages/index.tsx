@@ -195,7 +195,7 @@ export default function GiveawayInterface() {
                 >
                   <div className={styles.channelInfo}>
                       <Image
-                        src={channel.image_data}
+                        src={channel.image_data as string}
                         alt={channel.channelName}
                         width={80}
                         height={80}
