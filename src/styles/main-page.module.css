@@ -5,12 +5,11 @@
   font-weight: normal;
   font-style: normal;
 }
-html {
+/* html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* overflow-x: hidden; */
-}
+} */
 
 body {
   overscroll-behavior: none;
