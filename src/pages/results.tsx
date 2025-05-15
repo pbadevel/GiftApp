@@ -20,6 +20,7 @@ export default function ResultsPage() {
   const startParam = router.query.tgWebAppStartParam as string;
 
   const params = new URLSearchParams(startParam);
+  console.log('PARAMS:', params);
   const eventId = params.get('event_id');
 
   
