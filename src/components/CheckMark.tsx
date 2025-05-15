@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-// import styles from '@/styles/main-page.module.css'
+import styles from '@/styles/main-page.module.css'
 
 const Checkmark = () => {
   // Варианты анимации для круга (появление, например, масштабирование)
@@ -33,7 +33,7 @@ const Checkmark = () => {
   return (
     // Обертка, если нужно применять стили из CSS-модуля
     // <div className={styles.checkmarkContainer}>
-    <div> {/* Простой div-контейнер */}
+    <div className={styles.checkmarkContainer}>
       <motion.svg
         width="160" // Ширина SVG контейнера
         height="160" // Высота SVG контейнера
