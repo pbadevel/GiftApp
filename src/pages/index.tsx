@@ -54,7 +54,7 @@ export default function GiveawayInterface() {
         console.log('Decoded data:', data);
         setEventId(data.event_id)
         setAction(data.mode)
-        
+
         // Пример данных: { event_id: "123", mode: "raffle" }
         
         // Перенаправление на нужную страницу
@@ -208,7 +208,7 @@ export default function GiveawayInterface() {
             <div className={styles.headerSection}>
               <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
               <div className={styles.warningBox}>
-                ⚠️ Не отписывайтесь от каналов! Вы вылетите из розыгрыша!
+                ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
               </div>
               <RaffleTimer />
               <div className={styles.subTitle}>До завершения</div>
