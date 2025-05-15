@@ -23,9 +23,9 @@ export default function GiveawayInterface() {
   console.log('PARAMS:', params);
 
   const eventId = params.get('event_id');
-  const action = params.get('action');
+  const action = params.get('mode');
 
-  console.log(router.query, eventId)
+  console.log(router.query)
 
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
