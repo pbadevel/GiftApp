@@ -90,7 +90,7 @@ export default function GiveawayInterface() {
           
           localStorage.setItem('user_id', userId);
           
-          const _update = await apiService.SendDataToServer(userID, user?.username?.toString())
+          const _update = await apiService.SendDataToServer(userId, user?.username?.toString())
           if (! _update.ok) throw new Error('Failed to update User');
           setUserId(userId);
           
