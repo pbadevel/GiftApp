@@ -15,7 +15,13 @@ import Trophy from '@/components/TrophySVG';
 export default function ResultsPage() {
 
   const router = useRouter();
-  const { eventId } = router.query; // Получаем параметр из URL
+  // const { eventId } = router.query; // Получаем параметр из URL
+
+  const startParam = router.query.tgWebAppStartParam as string;
+
+  const params = new URLSearchParams(startParam);
+  const eventId = params.get('event_id');
+
   
   const [winners, setWinners] = useState<Winner[]>([]);
   const [eventID, setEventId] = useState('');
