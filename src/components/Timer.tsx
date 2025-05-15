@@ -71,7 +71,7 @@ const RaffleTimer = () => {
   }, [eventID]);
 
   // Форматирование времени с ведущими нулями
-  const format = (num: number) => num.toString().padStart(2, '1');
+  const format = (num: number) => num.toString().padStart(2, '0');
 
   return (
     <div className={styles.timer}>
