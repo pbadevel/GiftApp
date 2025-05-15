@@ -83,7 +83,7 @@ export default function ResultsPage() {
     };
   
     initializeData();
-  }, [eventId]); // Зависимость от eventId
+  }, [eventID]); // Зависимость от eventId
   
 
   useEffect(() => {
