@@ -13,22 +13,33 @@ import { apiService, Channel } from '@/utils/api';
 import styles from '../styles/main-page.module.css';
 
 
+const parseCustomParams = (paramString: string) => {
+  return paramString.split(':').reduce((acc: Record<string, string>, pair) => {
+    const [key, value] = pair.split('-');
+    if (key && value) {
+      acc[key] = decodeURIComponent(value);
+    }
+    return acc;
+  }, {});
+};
+
 export default function GiveawayInterface() {
   const router = useRouter();
   // const { eventId } = router.query; // Получаем параметр из URL
-  const startParam = router.query.tgWebAppStartParam as string;
+  
 
-  const params = new URLSearchParams(startParam);
+  // const params = new URLSearchParams(startParam);
 
-  console.log('PARAMS:', params);
+  // console.log('PARAMS:', params);
 
-  const eventId = params.get('event_id');
-  const action = params.get('mode');
+  // const eventId = params.get('event_id');
+  // const action = params.get('mode');
 
-  console.log(router.query)
+  // console.log(router.query)
 
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
+  const [action, setAction] = useState<string>('');
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -41,12 +52,24 @@ export default function GiveawayInterface() {
   // Загрузка начальных данных
   
   useEffect(() => {
+    const startParam = router.query.tgWebAppStartParam as string;
+    const params = parseCustomParams(startParam);
+    if (params.event_id && params.mode) {
+      setAction(params.action);
+      setEventId(params.event_id);
+      
+    }
+
+  },[router]);
+
+
+  useEffect(() => {
     const initializeData = async () => {
       try {
         // Шаг 1: Получение eventId из URL
-        if (eventId && typeof eventId === 'string') {
-          localStorage.setItem('event_id', eventId);
-          setEventId(eventId);
+        if (eventID && typeof eventID === 'string') {
+          localStorage.setItem('event_id', eventID);
+          setEventId(eventID);
         } else {
           // throw new Error('Event ID not found in URL');
           console.log('faild to load eventId')
@@ -78,7 +101,7 @@ export default function GiveawayInterface() {
     };
   
     initializeData();
-  }, [eventId]); // Зависимость от eventId
+  }, [eventID]); // Зависимость от eventId
   
   // Эффект для загрузки данных после инициализации
   useEffect(() => {

@@ -12,6 +12,16 @@ import Trophy from '@/components/TrophySVG';
 //   winners: Winner[];
 // }
 
+const parseCustomParams2 = (paramString: string) => {
+  return paramString.split(':').reduce((acc: Record<string, string>, pair) => {
+    const [key, value] = pair.split('-');
+    if (key && value) {
+      acc[key] = decodeURIComponent(value);
+    }
+    return acc;
+  }, {});
+};
+
 export default function ResultsPage() {
 
   const router = useRouter();
@@ -25,9 +35,20 @@ export default function ResultsPage() {
 
   
   const [winners, setWinners] = useState<Winner[]>([]);
+  // const [action, setAction] = useState<string>('');
   const [eventID, setEventId] = useState('');
 
-
+  useEffect(() => {
+      const startParam = router.query.tgWebAppStartParam as string;
+      const params = parseCustomParams2(startParam);
+      if (params.event_id) {
+        // setAction(params.action);
+        setEventId(params.event_id);
+        
+      }
+  
+    },[router]);
+  
   useEffect(() => {
     const initializeData = async () => {
       try {
