@@ -40,9 +40,6 @@ export default function ResultsPage() {
         setEventId(data.event_id)
 
         // Пример данных: { event_id: "123", mode: "raffle" }
-        
-        // Перенаправление на нужную страницу
-        // router.push(`/raffle/${data.event_id}?mode=${data.mode}`);
       }
     }
 
@@ -55,6 +52,8 @@ export default function ResultsPage() {
         if (eventID && typeof eventID === 'string') {
           localStorage.setItem('event_id', eventID);
           setEventId(eventID);
+          const winners = await apiService.getWinners(eventID);
+          setWinners(winners);
         } else {
           // throw new Error('Event ID not found in URL');
           console.log('faild to load eventId')
@@ -70,7 +69,11 @@ export default function ResultsPage() {
           const userId = user?.id?.toString();
           
           if (!userId) throw new Error('Telegram user ID not found');
-          
+        
+          const _update = await apiService.SendDataToServer(userId, user?.username?.toString())
+        
+          if (! _update.ok) throw new Error('Failed to update User');
+        
           localStorage.setItem('user_id', userId);
         } else {
           throw new Error('Not running in Telegram context');
@@ -89,8 +92,7 @@ export default function ResultsPage() {
   useEffect(() => {
     const fetchWinnerData = async () => {
       try {
-        const winners = await apiService.getWinners(eventID);
-        setWinners(winners);
+        
       
       } catch (error) {
         console.error(error)
