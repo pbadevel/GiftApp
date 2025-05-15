@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 
+import { decodeTelegramParams } from '@/utils/DecodeUtils';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { apiService, Winner } from '@/utils/api';
@@ -12,26 +13,18 @@ import Trophy from '@/components/TrophySVG';
 //   winners: Winner[];
 // }
 
-const parseCustomParams2 = (paramString: string) => {
-  return paramString.split(':').reduce((acc: Record<string, string>, pair) => {
-    const [key, value] = pair.split('-');
-    if (key && value) {
-      acc[key] = decodeURIComponent(value);
-    }
-    return acc;
-  }, {});
-};
-
 export default function ResultsPage() {
 
   const router = useRouter();
   // const { eventId } = router.query; // Получаем параметр из URL
 
-  const startParam = router.query.tgWebAppStartParam as string;
+  // const startParam = router.query.tgWebAppStartParam as string;
+  const { tgWebAppStartParam } = router.query;
 
-  const params = new URLSearchParams(startParam);
-  console.log('PARAMS:', params);
-  const eventId = params.get('event_id');
+
+  // const params = new URLSearchParams(startParam);
+  // console.log('PARAMS:', params);
+  // const eventId = params.get('event_id');
 
   
   const [winners, setWinners] = useState<Winner[]>([]);
@@ -39,23 +32,29 @@ export default function ResultsPage() {
   const [eventID, setEventId] = useState('');
 
   useEffect(() => {
-      const startParam = router.query.tgWebAppStartParam as string;
-      const params = parseCustomParams2(startParam);
-      if (params.event_id) {
-        // setAction(params.action);
-        setEventId(params.event_id);
+    if (typeof tgWebAppStartParam === 'string') {
+      const data = decodeTelegramParams(tgWebAppStartParam);
+      
+      if (data) {
+        console.log('Decoded data:', data);
+        setEventId(data.event_id)
+
+        // Пример данных: { event_id: "123", mode: "raffle" }
         
+        // Перенаправление на нужную страницу
+        // router.push(`/raffle/${data.event_id}?mode=${data.mode}`);
       }
-  
-    },[router]);
-  
+    }
+
+  },[tgWebAppStartParam]);
+
   useEffect(() => {
     const initializeData = async () => {
       try {
         // Шаг 1: Получение eventId из URL
-        if (eventId && typeof eventId === 'string') {
-          localStorage.setItem('event_id', eventId);
-          setEventId(eventId);
+        if (eventID && typeof eventID === 'string') {
+          localStorage.setItem('event_id', eventID);
+          setEventId(eventID);
         } else {
           // throw new Error('Event ID not found in URL');
           console.log('faild to load eventId')

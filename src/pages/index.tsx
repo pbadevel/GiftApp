@@ -8,20 +8,12 @@ import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
 import LoaderSVG from '@/components/Loader';
 import ResultsPage from './results';
+import { decodeTelegramParams } from '@/utils/DecodeUtils';
 import { apiService, Channel } from '@/utils/api';
 
 import styles from '../styles/main-page.module.css';
 
 
-const parseCustomParams = (paramString: string) => {
-  return paramString.split(':').reduce((acc: Record<string, string>, pair) => {
-    const [key, value] = pair.split('-');
-    if (key && value) {
-      acc[key] = decodeURIComponent(value);
-    }
-    return acc;
-  }, {});
-};
 
 export default function GiveawayInterface() {
   const router = useRouter();
@@ -36,6 +28,9 @@ export default function GiveawayInterface() {
   // const action = params.get('mode');
 
   // console.log(router.query)
+
+  const { tgWebAppStartParam } = router.query;
+
 
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
@@ -52,15 +47,22 @@ export default function GiveawayInterface() {
   // Загрузка начальных данных
   
   useEffect(() => {
-    const startParam = router.query.tgWebAppStartParam as string;
-    const params = parseCustomParams(startParam);
-    if (params.event_id && params.mode) {
-      setAction(params.action);
-      setEventId(params.event_id);
+    if (typeof tgWebAppStartParam === 'string') {
+      const data = decodeTelegramParams(tgWebAppStartParam);
       
+      if (data) {
+        console.log('Decoded data:', data);
+        setEventId(data.event_id)
+        setAction(data.mode)
+        
+        // Пример данных: { event_id: "123", mode: "raffle" }
+        
+        // Перенаправление на нужную страницу
+        // router.push(`/raffle/${data.event_id}?mode=${data.mode}`);
+      }
     }
 
-  },[router]);
+  },[tgWebAppStartParam]);
 
 
   useEffect(() => {
