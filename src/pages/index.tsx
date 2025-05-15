@@ -6,6 +6,7 @@ import Checkmark from '@/components/CheckMark';
 import RaffleTimer from '@/components/Timer';
 import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
+import LoaderSVG from '@/components/Loader';
 import { apiService, Channel } from '@/utils/api';
 
 import styles from '../styles/main-page.module.css';
@@ -138,7 +139,7 @@ export default function GiveawayInterface() {
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner} />
+        <LoaderSVG />
       </div>
     );
   }
