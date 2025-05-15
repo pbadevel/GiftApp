@@ -101,9 +101,9 @@ export const apiService = {
     }
   },
 
-  getUserTickets: async (userId: string): Promise<UserData> => {
+  getUserTickets: async (userId: string, eventId: string): Promise<UserData> => {
     try {
-      const response = await api.get(`/tickets/${userId}`);
+      const response = await api.get(`/tickets/${userId}-${eventId}`);
       return response.data;
     } catch (_error) {
       console.error(_error)

@@ -11,13 +11,14 @@ const Tickets = () => {
     const [tickets, setTickets] = useState<Ticket[]>([]);
 
     const userID = getLocalStorage('user_id')
+    const eventID = getLocalStorage('event_id')
 
     
     useEffect(() => {
         const fetchData = async () => {
         try {
             
-            const userData = await apiService.getUserTickets(userID as string);
+            const userData = await apiService.getUserTickets(userID as string, eventID as string);
             setTickets(userData.tickets);
 
         } catch (_error) {
