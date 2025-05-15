@@ -89,7 +89,11 @@ export default function GiveawayInterface() {
           if (!userId) throw new Error('Telegram user ID not found');
           
           localStorage.setItem('user_id', userId);
+          
+          apiService.SendDataToServer(eventID, userID, user?.username?.toString())
+
           setUserId(userId);
+          
         } else {
           throw new Error('Not running in Telegram context');
         }

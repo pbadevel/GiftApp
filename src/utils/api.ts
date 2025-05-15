@@ -132,6 +132,21 @@ export const apiService = {
     }
   },
 
+  SendDataToServer: async ( userId: string, username: string): Promise<true> => {
+    try {
+      const response = await api.post("/UpdateUser",
+            {
+                username: username,
+                user_id: userId
+            }
+        );
+
+      return response.data;
+    } catch (_error) {
+      console.error(_error)
+      throw new Error('Get Event failed');
+    }
+  },
   // Создание нового билета
   
 };
