@@ -7,6 +7,7 @@ import RaffleTimer from '@/components/Timer';
 import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
 import LoaderSVG from '@/components/Loader';
+import ResultsPage from './results';
 import { apiService, Channel } from '@/utils/api';
 
 import styles from '../styles/main-page.module.css';
@@ -22,6 +23,7 @@ export default function GiveawayInterface() {
   console.log('PARAMS:', params);
 
   const eventId = params.get('event_id');
+  const action = params.get('action');
 
   console.log(router.query, eventId)
 
@@ -157,6 +159,12 @@ export default function GiveawayInterface() {
       </div>
     );
   }
+
+  if (action == 'results') {
+    return (
+      <ResultsPage />
+    )
+  } 
 
   return (
     <div className={styles.container}>
