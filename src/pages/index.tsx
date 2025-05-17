@@ -89,12 +89,12 @@ export default function GiveawayInterface() {
 
           console.log(user)
           
-          
+
           if (!userId) throw new Error('Telegram user ID not found');
           
           localStorage.setItem('user_id', userId);
           
-          const _update = await apiService.SendDataToServer(userId, user?.username?.toString())
+          const _update = await apiService.SendDataToServer(user?.id?.toString(), user?.username?.toString())
           if (! _update.ok) throw new Error('Failed to update User');
           setUserId(userId);
           
