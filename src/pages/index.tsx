@@ -89,6 +89,7 @@ export default function GiveawayInterface() {
 
           console.log(user)
           
+          
           if (!userId) throw new Error('Telegram user ID not found');
           
           localStorage.setItem('user_id', userId);
