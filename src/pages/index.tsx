@@ -52,13 +52,11 @@ export default function GiveawayInterface() {
       
       if (data) {
         console.log('Decoded data:', data);
+        // Пример данных: { event_id: "123", mode: "raffle" }
+
         setEventId(data.event_id)
         setAction(data.mode)
 
-        // Пример данных: { event_id: "123", mode: "raffle" }
-        
-        // Перенаправление на нужную страницу
-        // router.push(`/raffle/${data.event_id}?mode=${data.mode}`);
       }
     }
 
@@ -68,16 +66,6 @@ export default function GiveawayInterface() {
   useEffect(() => {
     const initializeData = async () => {
       try {
-        // Шаг 1: Получение eventId из URL
-        if (eventID && typeof eventID === 'string') {
-          localStorage.setItem('event_id', eventID);
-          setEventId(eventID);
-        } else {
-          // throw new Error('Event ID not found in URL');
-          console.log('faild to load eventId')
-        }
-  
-        // Шаг 2: Получение userID из Telegram
         if (typeof window.Telegram?.WebApp !== 'undefined') {
           const tg = window.Telegram.WebApp;
           await tg.ready();
