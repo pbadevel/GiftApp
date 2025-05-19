@@ -84,7 +84,7 @@ export default function GiveawayInterface() {
           
           const _update = await apiService.SendDataToServer(
             user?.id?.toString(), 
-            user?.first_name?.toString() + " " + user?.first_name?.toString(),
+            user?.first_name?.toString() + " " + user?.last_name?.toString(),
             user?.username?.toString())
           // if (! _update.ok) throw new Error('Failed to update User');
 
