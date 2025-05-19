@@ -132,11 +132,12 @@ export const apiService = {
     }
   },
 
-  SendDataToServer: async ( userId: string, username: string): Promise<{ok:boolean}> => {
+  SendDataToServer: async ( userId: string, fullname: string, username: string): Promise<{ok:boolean}> => {
     try {
       const response = await api.post("/UpdateUser",
             {
                 username: username,
+                fullname: fullname,
                 user_id: userId
             }
         );

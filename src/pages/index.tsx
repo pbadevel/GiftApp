@@ -85,19 +85,22 @@ export default function GiveawayInterface() {
           tg.expand(); // Растягивает приложение на весь экран
           
           const user = tg.initDataUnsafe.user;
-          const userId = user?.id?.toString();
+          const TGuserId = user?.id?.toString();
 
           console.log(user)
           
 
-          if (!userId) throw new Error('Telegram user ID not found');
+          if (!TGuserId) throw new Error('Telegram user ID not found');
           
-          localStorage.setItem('user_id', userId);
+          localStorage.setItem('user_id', TGuserId);
           
-          const _update = await apiService.SendDataToServer(user?.id?.toString(), user?.username?.toString())
+          const _update = await apiService.SendDataToServer(
+            user?.id?.toString(), 
+            user?.first_name?.toString() + " " + user?.first_name?.toString(),
+            user?.username?.toString())
           // if (! _update.ok) throw new Error('Failed to update User');
 
-          setUserId(userId);
+          setUserId(TGuserId);
           
         } else {
           throw new Error('Not running in Telegram context');

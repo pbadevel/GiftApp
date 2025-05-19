@@ -27,7 +27,7 @@ const Tickets = () => {
         };
         
         fetchData();
-    }, [userID]);
+    }, [userID, eventID]);
     
     return (
     <div className={styles.ticketsSection}>

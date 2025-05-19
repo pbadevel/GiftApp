@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -14,35 +13,9 @@ interface ResultsPageProps {
 
 export default function ResultsPage( {event_id}: ResultsPageProps ) {
 
-  const router = useRouter();
-  // const { eventId } = router.query; // Получаем параметр из URL
-
-  // const startParam = router.query.tgWebAppStartParam as string;
-  // const { tgWebAppStartParam } = router.query;
-
-
-  // const params = new URLSearchParams(startParam);
-  // console.log('PARAMS:', params);
-  // const eventId = params.get('event_id');
-
   
   const [winners, setWinners] = useState<Winner[]>([]);
-  
-  // const [action, setAction] = useState<string>('');
 
-  // useEffect(() => {
-  //   if (typeof tgWebAppStartParam === 'string') {
-  //     const data = decodeTelegramParams(tgWebAppStartParam);
-      
-  //     if (data) {
-  //       console.log('Decoded data:', data);
-  //       setEventId(data.event_id)
-
-  //       // Пример данных: { event_id: "123", mode: "raffle" }
-  //     }
-  //   }
-
-  // },[tgWebAppStartParam]);
   useEffect(() => {
     const initializeData = async () => {
       try {
@@ -58,49 +31,6 @@ export default function ResultsPage( {event_id}: ResultsPageProps ) {
   
     initializeData();
   }, [event_id]); // Зависимость от пропса
-  // useEffect(() => {
-  //   const initializeData = async () => {
-  //     try {
-  //       // Шаг 1: Получение eventId из URL
-  //       if (eventID && typeof eventID === 'string') {
-  //         localStorage.setItem('event_id', eventID);
-  //         // setEventId(eventID);
-  //         const winners = await apiService.getWinners(eventID);
-  //         setWinners(winners);
-  //       } else {
-  //         // throw new Error('Event ID not found in URL');
-  //         console.log('faild to load eventId')
-  //       }
-  
-  //       // Шаг 2: Получение userID из Telegram
-  //       // if (typeof window.Telegram?.WebApp !== 'undefined') {
-  //       //   const tg = window.Telegram.WebApp;
-  //       //   await tg.ready();
-  //       //   tg.expand(); // Растягивает приложение на весь экран
-          
-  //       //   const user = tg.initDataUnsafe.user;
-  //       //   const userId = user?.id?.toString();
-          
-  //       //   if (!userId) throw new Error('Telegram user ID not found');
-        
-  //       //   const _update = await apiService.SendDataToServer(userId, user?.username?.toString())
-        
-  //       //   if (! _update.ok) throw new Error('Failed to update User');
-        
-  //       //   localStorage.setItem('user_id', userId);
-  //       // } else {
-  //       //   throw new Error('Not running in Telegram context');
-  //       // }
-  
-  //     } catch (error) {
-  //       console.error('Initialization error:', error);
-        
-  //     }
-  //   };
-  
-  //   initializeData();
-  // }, [eventID]); // Зависимость от eventId
-  
 
 
 
