@@ -96,7 +96,7 @@ export default function GiveawayInterface() {
   
       } catch (_error) {
         console.error('Initialization error:', _error);
-        setError('Ошибка инициализации данных');
+        setError('Ошибка! Запустите приложение в боте @GiveRandomeBot!');
 
         setLoading(false);
       }
@@ -164,11 +164,16 @@ export default function GiveawayInterface() {
   console.log(`userid=${userID}  eventid=${eventID}`)
 
   if (loading) {
+    let sleep = (ms: number) => new Promise(res=>setTimeout(res,ms));
+    
+    sleep(2000)
+
     return (
       <div className={styles.loadingContainer}>
         <LoaderSVG />
       </div>
     );
+
   }
 
   if (error) {
