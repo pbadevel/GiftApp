@@ -165,7 +165,13 @@ export default function GiveawayInterface() {
   if (loading) {
     let sleep = (ms: number) => new Promise(res=>setTimeout(res,ms));
     
-    sleep(2000)
+    const prepareData = async () => {
+      
+      await sleep(2000);
+      
+    }
+
+    prepareData();
 
     return (
       <div className={styles.loadingContainer}>
@@ -218,14 +224,10 @@ export default function GiveawayInterface() {
               <div className={styles.subTitle}>До завершения</div>
             </div>
             
-            {/* <a
-            href=''
-            className={styles.infoButton}>
-              Подробнее о розыгрыше
-            </a> */}
+            <InviteSection users_to_invite = {0}/>
             
-            <InviteSection />
             <Tickets />
+         
           </>
         ) : (
           <div className={styles.channelsSection}>

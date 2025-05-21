@@ -33,27 +33,23 @@ export interface Ticket {
 export interface SubscriptionStatus {
   allSubscribed: boolean;
   details: Channel[]
-  // Array<{
-  //   channelId: string;
-  //   channelName: string;
-  //   isSubscribed: boolean;
-  // }>;
 }
 
-export interface EventEndedAt {
+export interface EventData {
   
   days: number,
   hours: number,
   minutes: number,
-  seconds: number
+  seconds: number,
+
+  users_to_invite: number
   
   
 }
 
-export interface GiftEvent {
-  eventId: number;
-  EndedAt: EventEndedAt[]
-}
+
+
+
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // Исправлено для Next.js
@@ -122,7 +118,7 @@ export const apiService = {
     }
   },
 
-  getEvent: async (eventId: string): Promise<EventEndedAt> => {
+  getEvent: async (eventId: string): Promise<EventData> => {
     try {
       const response = await api.get(`/getEvent/${eventId}`);
       return response.data;
@@ -131,6 +127,7 @@ export const apiService = {
       throw new Error('Get Event failed');
     }
   },
+  
 
   SendDataToServer: async ( userId: string, fullname: string, username: string): Promise<{ok:boolean}> => {
     try {

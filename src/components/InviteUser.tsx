@@ -5,11 +5,15 @@ import { getLocalStorage } from '@/utils/LocalStorageUtils';
 import styles from '../styles/main-page.module.css';
 
 
+interface InvitedUsersCount {
+  users_to_invite: number
+}
 
-const InviteSection = () => {
+
+const InviteSection = ({users_to_invite}: InvitedUsersCount) => {
 
     const [referralLink, referralLinkData] = useState<string>("");
-    const invitedFriends = 1;
+    const invitedFriends = users_to_invite;
 
     const userID = getLocalStorage('user_id')
     const eventID = getLocalStorage('event_id')
@@ -21,8 +25,7 @@ const InviteSection = () => {
             
             const userData = await apiService.getUserData(userID as string, eventID as string);           
             referralLinkData(userData.referralLink);
-            
-
+  
         } catch (_error) {
             console.error(_error);
         }
@@ -84,26 +87,27 @@ const InviteSection = () => {
       };
       
     
-    return (
-        <div className={styles.inviteSection}>
-            <h2 className={styles.sectionTitle}>👥 Пригласить друзей</h2>
-            <div className={styles.referralBox}>
-                <input
-                type="text"
-                value={referralLink}
-                readOnly
-                className={styles.referralInput}
-                />
-                <button onClick={copyReferralLink} className={styles.copyButton}>
-                Скопировать
-                </button>
-            </div>
-            <div className={styles.bonusInfo}>
-                Получи тикет за приглашенного друга! (+{invitedFriends})
-            </div>
-            </div>
+    return ( invitedFriends!=0 && (
+      <div className={styles.inviteSection}>
+          <h2 className={styles.sectionTitle}>👥 Пригласить друзей</h2>
+          <div className={styles.referralBox}>
+              <input
+              type="text"
+              value={referralLink}
+              readOnly
+              className={styles.referralInput}
+              />
+              <button onClick={copyReferralLink} className={styles.copyButton}>
+              Скопировать
+              </button>
+          </div>
+          <div className={styles.bonusInfo}>
+              Получи тикет за приглашенного друга! (+{invitedFriends})
+          </div>
+          </div>
     )
-}
+  )
+};
 
 
 export default InviteSection;

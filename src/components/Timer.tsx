@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiService, EventEndedAt } from '../utils/api';
+import { apiService, EventData } from '../utils/api';
 import { getLocalStorage } from '@/utils/LocalStorageUtils';
 
 
@@ -10,7 +10,7 @@ const RaffleTimer = () => {
 
   const eventID = getLocalStorage('event_id')
 
-  const [timeLeft, setTimeLeft] = useState<EventEndedAt>({ 
+  const [timeLeft, setTimeLeft] = useState<EventData>({ 
     days: 0, 
     hours: 0, 
     minutes: 0, 
@@ -18,7 +18,7 @@ const RaffleTimer = () => {
   });
 
   // Функция для преобразования времени в секунды
-  const toSeconds = (t: EventEndedAt) => 
+  const toSeconds = (t: EventData) => 
     t.days * 86400 + t.hours * 3600 + t.minutes * 60 + t.seconds;
 
   
@@ -26,7 +26,7 @@ const RaffleTimer = () => {
   useEffect(() => {
     let syncInterval: NodeJS.Timeout;
     let timerInterval: NodeJS.Timeout;
-    const tick = (prev: EventEndedAt) => {
+    const tick = (prev: EventData) => {
       const total = toSeconds(prev) - 1;
       
       if (total <= 0) return { 
