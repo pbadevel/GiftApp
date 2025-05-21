@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { apiService, Winner } from '@/utils/api';
 import styles from '../styles/results.module.css';
 
+import LotteryProcessModal from '@/components/HowWin';
+// import WinnerAnimationModal from '@/components/HowWin';
 import Trophy from '@/components/TrophySVG';
 
 interface ResultsPageProps {
@@ -15,6 +17,8 @@ export default function ResultsPage( {event_id}: ResultsPageProps ) {
 
   
   const [winners, setWinners] = useState<Winner[]>([]);
+  const [showWinnerModal, setShowWinnerModal] = useState(false);
+
 
   useEffect(() => {
     const initializeData = async () => {
@@ -45,6 +49,33 @@ export default function ResultsPage( {event_id}: ResultsPageProps ) {
         <Trophy />
 
       </motion.div>
+
+      <button onClick={() => {
+        setShowWinnerModal(true);
+      }} className={styles.infoButton}> Как выбирали победителей ?</button> 
+      {/* 
+      For tests
+      winners = [
+          {
+            id: 1,
+            ticket: "36J7A9",
+            name: "Олег Максимович",
+            image_url: ""
+          },
+          {
+            id: 2,
+            ticket: "45K8B2",
+            name: "Ирина Петрова",
+            image_url: ""
+          }
+        ] */}
+      {showWinnerModal && (
+            <LotteryProcessModal 
+            winners={winners}
+            onClose={() => setShowWinnerModal(false)}
+            />
+          )}
+
 
       <h1 className={styles.title}>Победители розыгрыша</h1>
       
