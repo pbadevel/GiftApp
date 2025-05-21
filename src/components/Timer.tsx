@@ -14,7 +14,8 @@ const RaffleTimer = () => {
     days: 0, 
     hours: 0, 
     minutes: 0, 
-    seconds: 0 
+    seconds: 0,
+    users_to_invite:0
   });
 
   // Функция для преобразования времени в секунды
