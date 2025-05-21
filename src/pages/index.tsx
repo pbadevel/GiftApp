@@ -97,7 +97,6 @@ export default function GiveawayInterface() {
       } catch (_error) {
         console.error('Initialization error:', _error);
         setError('Ошибка! Запустите приложение в боте @GiveRandomeBot!');
-
         setLoading(false);
       }
     };

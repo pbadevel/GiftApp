@@ -35,8 +35,8 @@ const Checkmark = () => {
     // <div className={styles.checkmarkContainer}>
     <div className={styles.checkmarkContainer}>
       <motion.svg
-        width="160" // Ширина SVG контейнера
-        height="160" // Высота SVG контейнера
+        width="130" // Ширина SVG контейнера
+        height="130" // Высота SVG контейнера
         viewBox="0 0 24 24" // Внутренняя система координат (для удобства рисования)
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

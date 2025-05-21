@@ -33,6 +33,13 @@ const Tickets = () => {
     <div className={styles.ticketsSection}>
         <h2 className={styles.sectionTitle}>🎟 Тикеты</h2>
         <div className={styles.ticketsList}>
+        
+        {/* For test */}
+        {/* <div key={1} className={styles.ticketCard}>
+            <div>Тикет: <span className={styles.ticketNumber}>123</span></div>
+            <div className={styles.ticketDate}>Получен : 1123</div>
+        </div> */}
+        
             {tickets.map(ticket => (
             <div key={ticket.id} className={styles.ticketCard}>
                 <div>Тикет: <span className={styles.ticketNumber}>{ticket.number}</span></div>
