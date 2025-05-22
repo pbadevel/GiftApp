@@ -38,7 +38,7 @@ export default function GiveawayInterface() {
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
   const [action, setAction] = useState<string>('');
-  const [useCaptcha, setCaptcha] = useState<boolean>(true);
+  const [useCaptcha, setCaptcha] = useState<number>(1);
   const [tickets_to_invite, setTikForInv] = useState<number>(0);
 
 
@@ -212,10 +212,10 @@ export default function GiveawayInterface() {
     )
   } 
 
-  if (useCaptcha) {
+  if (useCaptcha==1) {
     return (
       <Captcha 
-        onSuccess={() => console.log('Капча пройдена!')}
+        onSuccess={() => setCaptcha(0)}
         fetchCaptcha={async () => {
           // Пример реализации запроса капчи
           const response = await apiService.getCaptcha();

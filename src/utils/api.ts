@@ -48,7 +48,7 @@ export interface EventDate {
 
 export interface EventData {
   users_to_invite: number,
-  use_captcha: boolean
+  use_captcha: number
 }
 
 export interface CaptchaData {
