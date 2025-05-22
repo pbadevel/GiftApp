@@ -72,9 +72,7 @@ export default function GiveawayInterface() {
     const initializeData = async () => {
       try {
         if (typeof window.Telegram?.WebApp !== 'undefined') {
-          const eventData = await apiService.getEventData(eventID) 
-          setCaptcha(eventData.use_captcha)
-          setTikForInv(eventData.users_to_invite)
+
 
 
           const tg = window.Telegram.WebApp;
@@ -121,6 +119,9 @@ export default function GiveawayInterface() {
       
       try {
         setLoading(true);
+        const eventData = await apiService.getEventData(eventID) 
+        setCaptcha(eventData.use_captcha)
+        setTikForInv(eventData.users_to_invite)
         const subscriptionResponse = await apiService.checkSubscriptions(userID, eventID);
         
         setChannels(subscriptionResponse.details);
