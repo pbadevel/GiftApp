@@ -5,7 +5,6 @@ import { apiService, Channel, Winner } from '@/utils/api';
 import styles from '../styles/results.module.css';
 
 import LotteryProcessModal from '@/components/HowWin';
-// import WinnerAnimationModal from '@/components/HowWin';
 import Trophy from '@/components/TrophySVG';
 
 interface ResultsPageProps {

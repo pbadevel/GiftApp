@@ -60,7 +60,7 @@ const LotteryProcessModal = ({ winners, channels, onClose }: WinnerModalProps) =
           </div>
         </div>
       ), 
-      delay: 2000 
+      delay: 3000 
     },
     { 
       content: <div className={styles.simpleStep}>
