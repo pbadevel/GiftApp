@@ -20,17 +20,8 @@ import styles from '../styles/main-page.module.css';
 
 export default function GiveawayInterface() {
   const router = useRouter();
-  // const { eventId } = router.query; // Получаем параметр из URL
   
-
-  // const params = new URLSearchParams(startParam);
-
-  // console.log('PARAMS:', params);
-
-  // const eventId = params.get('event_id');
-  // const action = params.get('mode');
-
-  // console.log(router.query)
+  localStorage.clear()
 
   const { tgWebAppStartParam } = router.query;
 
