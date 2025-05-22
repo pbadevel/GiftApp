@@ -43,7 +43,6 @@ export default function GiveawayInterface() {
   
   useEffect(() => {
     if (typeof tgWebAppStartParam === 'string') {
-      localStorage.clear()
       const data = decodeTelegramParams(tgWebAppStartParam);
       
       if (data) {
@@ -63,8 +62,6 @@ export default function GiveawayInterface() {
     const initializeData = async () => {
       try {
         if (typeof window.Telegram?.WebApp !== 'undefined') {
-
-
 
           const tg = window.Telegram.WebApp;
           await tg.ready();
@@ -232,13 +229,13 @@ export default function GiveawayInterface() {
               <div className={styles.warningBox}>
                 ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
               </div>
-              <RaffleTimer />
+              <RaffleTimer event_id={eventID} />
               <div className={styles.subTitle}>До завершения</div>
             </div>
             
-            <InviteSection users_to_invite = {tickets_to_invite}/>
+            <InviteSection users_to_invite={tickets_to_invite} event_id={eventID}/>
             
-            <Tickets />
+            <Tickets event_id={eventID}/>
          
           </>
         ) : (

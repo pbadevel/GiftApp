@@ -6,12 +6,16 @@ import { getLocalStorage } from '@/utils/LocalStorageUtils';
 import styles from '../styles/main-page.module.css';
 
 
+interface EventPropsId {
+    event_id : string
+}
 
-const Tickets = () => {
+
+const Tickets = ({event_id}:EventPropsId) => {
     const [tickets, setTickets] = useState<Ticket[]>([]);
 
     const userID = getLocalStorage('user_id')
-    const eventID = getLocalStorage('event_id')
+    const eventID = event_id
 
     
     useEffect(() => {

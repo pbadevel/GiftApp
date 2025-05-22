@@ -5,18 +5,19 @@ import { getLocalStorage } from '@/utils/LocalStorageUtils';
 import styles from '../styles/main-page.module.css';
 
 
-interface InvitedUsersCount {
+
+interface InviteDataProps {
+  event_id : string
   users_to_invite: number
 }
 
-
-const InviteSection = ({users_to_invite}: InvitedUsersCount) => {
+const InviteSection = ({users_to_invite, event_id}: InviteDataProps) => {
 
     const [referralLink, referralLinkData] = useState<string>("");
     const invitedFriends = users_to_invite;
 
     const userID = getLocalStorage('user_id')
-    const eventID = getLocalStorage('event_id')
+    const eventID = event_id
 
     
     useEffect(() => {

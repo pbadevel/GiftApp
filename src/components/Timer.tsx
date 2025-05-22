@@ -6,9 +6,14 @@ import { getLocalStorage } from '@/utils/LocalStorageUtils';
 import styles from '@/styles/main-page.module.css'
 
 
-const RaffleTimer = () => {
+interface EventPropsId {
+  event_id : string
+}
 
-  const eventID = getLocalStorage('event_id')
+
+const RaffleTimer = ({event_id}: EventPropsId) => {
+
+  const eventID = event_id
 
   const [timeLeft, setTimeLeft] = useState<EventDate>({ 
     days: 0, 
