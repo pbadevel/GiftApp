@@ -35,16 +35,27 @@ export interface SubscriptionStatus {
   details: Channel[]
 }
 
-export interface EventData {
+
+export interface EventDate {
   
   days: number,
   hours: number,
   minutes: number,
   seconds: number,
+}
 
-  users_to_invite: number
-  
-  
+
+
+export interface EventData {
+  users_to_invite: number,
+  use_captcha: boolean
+}
+
+export interface CaptchaData {
+  image: string,
+  answers: string[],
+  right: string
+
 }
 
 
@@ -61,6 +72,15 @@ const api = axios.create({
 // API методы
 export const apiService = {
   // Получение списка каналов
+  getCaptcha: async (): Promise<CaptchaData> => {
+    try {
+      const response = await api.get(`/captcha`);
+      return response.data;
+    } catch (_error) {
+      console.error(_error)
+      throw new Error('Failed to fetch channels');
+    }
+  },
   getChannels: async (eventId: string): Promise<Channel[]> => {
     try {
       const response = await api.get(`/channels/${eventId}`);
@@ -118,7 +138,17 @@ export const apiService = {
     }
   },
 
-  getEvent: async (eventId: string): Promise<EventData> => {
+  getEventDate: async (eventId: string): Promise<EventDate> => {
+    try {
+      const response = await api.get(`/getEventDate/${eventId}`);
+      return response.data;
+    } catch (_error) {
+      console.error(_error)
+      throw new Error('Get Event failed');
+    }
+  },
+
+  getEventData: async (eventId: string): Promise<EventData> => {
     try {
       const response = await api.get(`/getEvent/${eventId}`);
       return response.data;

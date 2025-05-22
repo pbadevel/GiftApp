@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiService, EventData } from '../utils/api';
+import { apiService, EventDate } from '../utils/api';
 import { getLocalStorage } from '@/utils/LocalStorageUtils';
 
 
@@ -10,16 +10,15 @@ const RaffleTimer = () => {
 
   const eventID = getLocalStorage('event_id')
 
-  const [timeLeft, setTimeLeft] = useState<EventData>({ 
+  const [timeLeft, setTimeLeft] = useState<EventDate>({ 
     days: 0, 
     hours: 0, 
     minutes: 0, 
-    seconds: 0,
-    users_to_invite:0
+    seconds: 0
   });
 
   // Функция для преобразования времени в секунды
-  const toSeconds = (t: EventData) => 
+  const toSeconds = (t: EventDate) => 
     t.days * 86400 + t.hours * 3600 + t.minutes * 60 + t.seconds;
 
   
@@ -27,29 +26,27 @@ const RaffleTimer = () => {
   useEffect(() => {
     let syncInterval: NodeJS.Timeout;
     let timerInterval: NodeJS.Timeout;
-    const tick = (prev: EventData) => {
+    const tick = (prev: EventDate) => {
       const total = toSeconds(prev) - 1;
       
       if (total <= 0) return { 
-        days: 0, 
-        hours: 0, 
-        minutes: 0, 
-        seconds: 0 ,
-        users_to_invite:0
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
       };
   
       return {
         days: Math.floor(total / 86400),
         hours: Math.floor((total % 86400) / 3600),
         minutes: Math.floor((total % 3600) / 60),
-        seconds: total % 60,
-        users_to_invite:0
+        seconds: total % 60
       };
     };
     
     const syncWithServer = async () => {
       try {
-        const serverTime = await apiService.getEvent(eventID as string);
+        const serverTime = await apiService.getEventDate(eventID as string);
         setTimeLeft(serverTime);
       } catch (error) {
         console.error('Ошибка синхронизации:', error);

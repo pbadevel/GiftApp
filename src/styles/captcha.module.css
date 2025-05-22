@@ -1,0 +1,72 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .captchaImage {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .answerButton {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+  
+  .answerButton:hover {
+    background: #e0e0e0;
+    transform: translateY(-1px);
+  }
+  
+  .loader {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .error {
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  .retryButton {
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .retryButton:hover {
+    background: #0056b3;
+  }

@@ -7,7 +7,10 @@ import RaffleTimer from '@/components/Timer';
 import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
 import LoaderSVG from '@/components/Loader';
+import Captcha from '@/components/Captcha';
+
 import ResultsPage from './results';
+
 import { decodeTelegramParams } from '@/utils/DecodeUtils';
 import { apiService, Channel } from '@/utils/api';
 
@@ -35,6 +38,8 @@ export default function GiveawayInterface() {
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
   const [action, setAction] = useState<string>('');
+  const [useCaptcha, setCaptcha] = useState<boolean>(true);
+  const [tickets_to_invite, setTikForInv] = useState<number>(0);
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -67,6 +72,11 @@ export default function GiveawayInterface() {
     const initializeData = async () => {
       try {
         if (typeof window.Telegram?.WebApp !== 'undefined') {
+          const eventData = await apiService.getEventData(eventID) 
+          setCaptcha(eventData.use_captcha)
+          setTikForInv(eventData.users_to_invite)
+
+
           const tg = window.Telegram.WebApp;
           await tg.ready();
 
@@ -201,6 +211,19 @@ export default function GiveawayInterface() {
     )
   } 
 
+  if (useCaptcha) {
+    return (
+      <Captcha 
+        onSuccess={() => console.log('Капча пройдена!')}
+        fetchCaptcha={async () => {
+          // Пример реализации запроса капчи
+          const response = await apiService.getCaptcha();
+          return response;
+        }}
+      />
+    )
+  }
+
   return (
     <div className={styles.container}>
       <motion.div 
@@ -221,7 +244,7 @@ export default function GiveawayInterface() {
               <div className={styles.subTitle}>До завершения</div>
             </div>
             
-            <InviteSection users_to_invite = {0}/>
+            <InviteSection users_to_invite = {tickets_to_invite}/>
             
             <Tickets />
          
