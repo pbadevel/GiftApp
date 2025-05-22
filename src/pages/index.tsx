@@ -21,7 +21,6 @@ import styles from '../styles/main-page.module.css';
 export default function GiveawayInterface() {
   const router = useRouter();
   
-  localStorage.clear()
 
   const { tgWebAppStartParam } = router.query;
 
@@ -44,6 +43,7 @@ export default function GiveawayInterface() {
   
   useEffect(() => {
     if (typeof tgWebAppStartParam === 'string') {
+      localStorage.clear()
       const data = decodeTelegramParams(tgWebAppStartParam);
       
       if (data) {
