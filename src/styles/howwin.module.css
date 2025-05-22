@@ -128,3 +128,32 @@
     color: #2196F3;
     font-weight: 500;
   }
+
+
+  .channelsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  
+  .channelItem {
+    background: #f5f5f5;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .statusSuccess {
+    color: #4CAF50;
+    margin-left: 4px;
+    font-weight: 500;
+  }
+  
+  .statusError {
+    color: #f44336;
+    margin-left: 4px;
+    font-weight: 500;
+  }

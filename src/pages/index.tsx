@@ -208,9 +208,6 @@ export default function GiveawayInterface() {
         animate={{ opacity: 1 }}
         className={styles.contentWrapper}
       >
-        {/* <Link href="/admin" className={styles.adminLink}>
-          Админ-панель
-        </Link> */}
 
         {allSubscribed ? (
           <>

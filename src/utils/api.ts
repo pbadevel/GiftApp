@@ -61,10 +61,10 @@ const api = axios.create({
 // API методы
 export const apiService = {
   // Получение списка каналов
-  getChannels: async (userId: string): Promise<Channel[]> => {
+  getChannels: async (eventId: string): Promise<Channel[]> => {
     try {
-      const response = await api.get(`/channels/${userId}`);
-      return response.data;
+      const response = await api.get(`/channels/${eventId}`);
+      return response.data.channels;
     } catch (_error) {
       console.error(_error)
       throw new Error('Failed to fetch channels');

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/howwin.module.css';
+import { Channel } from '@/utils/api';
+
 
 export interface Winner {
   id: number;
@@ -8,15 +10,39 @@ export interface Winner {
   image_url: string;
 }
 
+
+  
 interface WinnerModalProps {
-  winners: Winner[];
-  onClose: () => void;
+winners: Winner[];
+channels: Channel[];
+onClose: () => void;
 }
 
-const LotteryProcessModal = ({ winners, onClose }: WinnerModalProps) => {
+
+
+const LotteryProcessModal = ({ winners, channels, onClose }: WinnerModalProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
+
+  const subscriptionCheckContent = (
+    <div className={styles.simpleStep}>
+      <h3 className={styles.miniTitle}>Проверка подписок</h3>
+      <div className={styles.channelsList}>
+        {channels.map(channel => (
+          <span key={channel.channelId} className={styles.channelItem}>
+            {channel.channelName}
+            {channel.isSubscribed ? (
+              <span className={styles.statusSuccess}> ✓</span>
+            ) : (
+              <span className={styles.statusError}> ✗</span>
+            )}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
 
   const steps = [
     { 
@@ -46,6 +72,10 @@ const LotteryProcessModal = ({ winners, onClose }: WinnerModalProps) => {
         ))}
       </div>, 
       delay: 2000 
+    },
+    { 
+      content: subscriptionCheckContent,
+      delay: 2500 
     },
     { 
       content: <div className={styles.simpleStep}>

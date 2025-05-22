@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { apiService, Winner } from '@/utils/api';
+import { apiService, Channel, Winner } from '@/utils/api';
 import styles from '../styles/results.module.css';
 
 import LotteryProcessModal from '@/components/HowWin';
@@ -12,21 +12,24 @@ interface ResultsPageProps {
   event_id: string;
 }
 
-
 export default function ResultsPage( {event_id}: ResultsPageProps ) {
 
   
   const [winners, setWinners] = useState<Winner[]>([]);
+  const [channels, setWinChannels] = useState<Channel[]>([])
   const [showWinnerModal, setShowWinnerModal] = useState(false);
-
-
+  
   useEffect(() => {
     const initializeData = async () => {
       try {
         if (event_id) { // Используем пропс напрямую
           localStorage.setItem('event_id', event_id);
+
           const winners = await apiService.getWinners(event_id);
           setWinners(winners);
+
+          const winChannels = await apiService.getChannels(event_id);
+          setWinChannels(winChannels);
         }
       } catch (error) {
         console.error('Error loading winners:', error);
@@ -68,10 +71,28 @@ export default function ResultsPage( {event_id}: ResultsPageProps ) {
             name: "Ирина Петрова",
             image_url: ""
           }
-        ] */}
+        ] 
+         channels={[
+          {
+            channelId: "1",
+            channelName: "Технический блог",
+            channelUrl: "...",
+            isSubscribed: true
+          },
+          {
+            channelId: "2",
+            channelName: "Новости компании",
+            channelUrl: "...",
+            isSubscribed: false
+          }
+        ]}
+
+         
+         */}
       {showWinnerModal && (
             <LotteryProcessModal 
             winners={winners}
+            channels={channels}
             onClose={() => setShowWinnerModal(false)}
             />
           )}
