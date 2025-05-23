@@ -89,9 +89,7 @@ export default function GiveawayInterface() {
 
           setUserId(TGuserId);
           
-        } else {
-          throw new Error('Not running in Telegram context');
-        }
+        
   
       } catch (_error) {
         console.error('Initialization error:', _error);
