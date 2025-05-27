@@ -308,7 +308,7 @@ export default function GiveawayInterface() {
           </div>
         )
     } else {
-      checkSubscriptionsOnSiteByReferral();
+      return checkSubscriptionsOnSiteByReferral();
     }
   }
 
