@@ -308,7 +308,21 @@ export default function GiveawayInterface() {
           </div>
         )
     } else {
-      return checkSubscriptionsOnSiteByReferral();
+      const checkReferrer = async () => {
+        const refResponse = await apiService.SendReferralToServer(
+            userID,
+            referrer_id,
+            eventID
+          )
+  
+          if (refResponse.ok){
+            showToast(refResponse.message, "success")
+            router.reload();
+          } else {
+            showToast(refResponse.message, "error")
+          }
+      }
+      checkReferrer();
     }
   }
 
