@@ -28,6 +28,7 @@ export default function GiveawayInterface() {
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
   const [action, setAction] = useState<string>('');
+  const [referrer_id, setReferrerId] = useState<string>('');
   const [useCaptcha, setCaptcha] = useState<number>(1);
   const [tickets_to_invite, setTikForInv] = useState<number>(0);
 
@@ -51,6 +52,7 @@ export default function GiveawayInterface() {
 
         setEventId(data.event_id)
         setAction(data.mode)
+        setReferrerId(data?.referrer_id)
 
       }
     }
@@ -200,6 +202,10 @@ export default function GiveawayInterface() {
       <ResultsPage event_id={eventID}/>
     )
   } 
+
+  else if (action=='ref') {
+    console.log(referrer_id, action)
+  }
 
   if (useCaptcha==1) {
     return (
