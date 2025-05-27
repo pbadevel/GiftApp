@@ -187,7 +187,7 @@ export const apiService = {
 
   SendReferralToServer: async ( referral_id: string, referrer_id: string, event_id: string): Promise<ReferralAnswer> => {
     try {
-      const response = await api.post("/c",
+      const response = await api.post("/MakeReferral",
             {
                 referral_id: referral_id,
                 referrer_id: referrer_id,
