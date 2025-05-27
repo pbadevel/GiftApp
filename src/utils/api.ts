@@ -60,6 +60,13 @@ export interface CaptchaData {
 
 
 
+export interface ReferralAnswer {
+  ok: boolean,
+  message: string
+}
+
+
+
 
 
 const api = axios.create({
@@ -81,6 +88,7 @@ export const apiService = {
       throw new Error('Failed to fetch channels');
     }
   },
+
   getChannels: async (eventId: string): Promise<Channel[]> => {
     try {
       const response = await api.get(`/channels/${eventId}`);
@@ -159,7 +167,7 @@ export const apiService = {
   },
   
 
-  SendDataToServer: async ( userId: string, fullname: string, username: string): Promise<{ok:boolean}> => {
+  SendUserToServer: async ( userId: string, fullname: string, username: string): Promise<{ok:boolean}> => {
     try {
       const response = await api.post("/UpdateUser",
             {
@@ -172,10 +180,27 @@ export const apiService = {
       return response.data;
     } catch (_error) {
       console.error(_error)
-      throw new Error('Get Event failed');
+      throw new Error('Send User Data Failed');
     }
   },
-  // Создание нового билета
+
+
+  SendReferralToServer: async ( referral_id: string, referrer_id: string, event_id: string): Promise<ReferralAnswer> => {
+    try {
+      const response = await api.post("/c",
+            {
+                referral_id: referral_id,
+                referrer_id: referrer_id,
+                event_id: event_id
+            }
+        );
+
+      return response.data;
+    } catch (_error) {
+      console.error(_error)
+      throw new Error('Send User Data Failed');
+    }
+  },
   
 };
 

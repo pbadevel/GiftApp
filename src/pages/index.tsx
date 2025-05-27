@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+
+import { useToast } from '@/context/ToastContext';
+
 import Image from 'next/image';
 import Checkmark from '@/components/CheckMark';
 import RaffleTimer from '@/components/Timer';
@@ -31,6 +34,14 @@ export default function GiveawayInterface() {
   const [referrer_id, setReferrerId] = useState<string>('');
   const [useCaptcha, setCaptcha] = useState<number>(1);
   const [tickets_to_invite, setTikForInv] = useState<number>(0);
+
+  const { showToast } = useToast();
+  // const handleClick = () => {
+    // showToast('Успешно сохранено!', 'success');
+    // showToast('Ошибка соединения', 'error');
+    // showToast('Информационное сообщение', 'info');
+  // };
+
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -83,7 +94,7 @@ export default function GiveawayInterface() {
           
           localStorage.setItem('user_id', TGuserId);
           
-          const _update = await apiService.SendDataToServer(
+          const _update = await apiService.SendUserToServer(
             user?.id?.toString(), 
             user?.first_name?.toString() + " " + user?.last_name?.toString(),
             user?.username?.toString())
@@ -162,6 +173,47 @@ export default function GiveawayInterface() {
     }
   };
 
+  const checkSubscriptionsOnSiteByReferral = async () => {
+    setIsChecking(true);
+    try {
+      const result = await apiService.checkSubscriptions(
+        userID,
+        eventID
+      );
+
+      const updatedChannels = channels.map(channel => ({
+        ...channel,
+        isSubscribed: result.details.find(
+          d => d.channelId === channel.channelId
+        )?.isSubscribed || false
+      }));
+
+      setChannels(updatedChannels);
+      setAllSubscribed(result.allSubscribed);
+
+      if (result.allSubscribed) {
+        const refResponse = await apiService.SendReferralToServer(
+          userID,
+          referrer_id,
+          eventID
+        )
+
+        if (refResponse.ok){
+          showToast(refResponse.message, "success")
+          router.reload();
+        } else {
+          showToast(refResponse.message, "error")
+        }
+        
+      }
+    } catch (_err) {
+      console.error(_err)
+      setError('Ошибка проверки подписок');
+    } finally {
+      setIsChecking(false);
+    }
+  }
+
   console.log(`userid=${userID}  eventid=${eventID}`)
 
   if (loading) {
@@ -189,7 +241,7 @@ export default function GiveawayInterface() {
         <div className={styles.errorText}>{error}</div>
         <button 
           className={styles.retryButton}
-          onClick={() => window.location.reload()}
+          onClick={() => router.reload()}
         >
           Попробовать снова
         </button>
@@ -205,6 +257,57 @@ export default function GiveawayInterface() {
 
   else if (action=='ref') {
     console.log(referrer_id, action)
+    if (!allSubscribed) {
+       return (
+          <div className={styles.channelsSection}>
+            <h2>Для участия подпишитесь на все каналы:</h2>
+            
+            {channels.map((channel) => (
+              !channel.isSubscribed && (
+                <motion.div
+                  key={channel.channelId}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={styles.channelCard}
+                >
+                  <div className={styles.channelInfo}>
+                      <Image
+                        src={channel.image_data as string}
+                        alt={channel.channelName}
+                        width={80}
+                        height={80}
+                        className={styles.avatar}
+                      />
+                    <h3>{channel.channelName}</h3>
+                  </div>
+                  <a
+                    className={styles.subscribeButton}
+                    target='_blank'
+                    href={channel.channelUrl}
+                  >
+                    {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
+                  </a>
+                </motion.div>
+              )
+            ))}
+            
+            <button
+              onClick={checkSubscriptionsOnSiteByReferral}
+              className={styles.checkButton}
+              disabled={isChecking}
+            >
+              {isChecking ? (
+                <>
+                  <span className={styles.spinner} />
+                  Проверяем...
+                </>
+              ) : (
+                'Проверить подписки'
+              )}
+            </button>
+          </div>
+        )
+    }
   }
 
   if (useCaptcha==1) {
