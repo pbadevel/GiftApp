@@ -11,6 +11,7 @@ import Tickets from '@/components/TicketCard';
 import InviteSection from '@/components/InviteUser';
 import LoaderSVG from '@/components/Loader';
 import Captcha from '@/components/Captcha';
+import ErrorMarkSvg from '@/components/ErrorMark';
 
 import ResultsPage from './results';
 
@@ -320,6 +321,17 @@ export default function GiveawayInterface() {
             router.reload();
           } else {
             showToast(refResponse.message, "error")
+            return (
+              <div className={styles.errorContainer}>
+                <ErrorMarkSvg />
+                <button 
+                  className={styles.retryButton}
+                  onClick={() => router.reload()}
+                >
+                  Попробовать снова
+                </button>
+              </div>
+            );
           }
       }
       checkReferrer();
