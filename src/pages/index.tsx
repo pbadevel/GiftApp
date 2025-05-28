@@ -170,6 +170,7 @@ export default function GiveawayInterface() {
   };
 
   const checkSubscriptionsOnSiteByReferral = async () => {
+    console.log(messageCounter)
     setIsChecking(true);
     try {
       const result = await apiService.checkSubscriptions(
