@@ -152,6 +152,7 @@ export default function GiveawayInterface() {
         referrer_id,
         eventID
       );
+      console.log(refResponse)
 
       if (refResponse.ok) {
         showToast(refResponse.message, "success");
