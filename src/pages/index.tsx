@@ -143,35 +143,38 @@ export default function GiveawayInterface() {
 
   // Обработка рефералов
   const processReferral = useCallback(async () => {
-    if (!userID || !referrer_id || !eventID || isReferralProcessed) return false;
-    
-    setIsReferralProcessed(true); // Помечаем как обработанное
-    try {
-      const refResponse = await apiService.SendReferralToServer(
-        userID,
-        referrer_id,
-        eventID
-      );
-      console.log(refResponse, isReferralProcessed)
+    if (!userID && !referrer_id && !eventID || isReferralProcessed) return false;
+    if (isReferralProcessed){
 
-      if (refResponse.ok) {
-        showToast(refResponse.message, "success");
-      setIsReferralProcessed(false);
-        return true;
-      } else {
-        showToast(refResponse.message, "error");
-      setIsReferralProcessed(false);
+      setIsReferralProcessed(true); // Помечаем как обработанное
+      console.log('start:->', isReferralProcessed);
+      try {
+        const refResponse = await apiService.SendReferralToServer(
+          userID,
+          referrer_id,
+          eventID
+        );
+        console.log(refResponse, isReferralProcessed)
+  
+        if (refResponse.ok) {
+          showToast(refResponse.message, "success");
+        setIsReferralProcessed(false);
+          return true;
+        } else {
+          showToast(refResponse.message, "error");
+        setIsReferralProcessed(false);
+          return false;
+        }
+      } catch (error) {
+        console.error('Referral processing error:', error);
+        showToast('Ошибка обработки реферала', "error");
         return false;
+      } finally {
+        // Сбрасываем флаг обработки при неудаче для повторной попытки
+        console.log('end:->', isReferralProcessed);
+        setIsReferralProcessed(false);
       }
-    } catch (error) {
-      console.error('Referral processing error:', error);
-      showToast('Ошибка обработки реферала', "error");
-      return false;
-    } finally {
-      // Сбрасываем флаг обработки при неудаче для повторной попытки
-      setIsReferralProcessed(false);
     }
-    console.log('end:->', isReferralProcessed);
   }, [userID, referrer_id, eventID, showToast, isReferralProcessed]);
 
   // Эффект для обработки рефералов при загрузке
