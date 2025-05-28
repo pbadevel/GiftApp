@@ -334,6 +334,33 @@ export default function GiveawayInterface() {
           }
       }
       checkReferrer();
+
+      return (
+      <div className={styles.container}>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={styles.contentWrapper}
+        >
+          <>
+              <Checkmark />
+              <div className={styles.headerSection}>
+                <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
+                <div className={styles.warningBox}>
+                  ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
+                </div>
+                <RaffleTimer event_id={eventID} />
+                <div className={styles.subTitle}>До завершения</div>
+              </div>
+              
+              <InviteSection users_to_invite={tickets_to_invite} event_id={eventID}/>
+              
+              <Tickets event_id={eventID}/>
+          
+          </>
+        </motion.div>
+      </div>
+  );
     }
   }
 
