@@ -37,12 +37,7 @@ export default function GiveawayInterface() {
   const [tickets_to_invite, setTikForInv] = useState<number>(0);
 
   const { showToast } = useToast();
-  // const handleClick = () => {
-    // showToast('Успешно сохранено!', 'success');
-    // showToast('Ошибка соединения', 'error');
-    // showToast('Информационное сообщение', 'info');
-  // };
-
+  const [messageCounter, setMessageCounter] = useState(0)
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -199,10 +194,10 @@ export default function GiveawayInterface() {
           eventID
         )
 
-        if (refResponse.ok){
+        if (refResponse.ok && (messageCounter < 4) ){
           showToast(refResponse.message, "success")
           router.reload();
-        } else {
+        } else if ((!refResponse.ok) && (messageCounter < 4) ){
           showToast(refResponse.message, "error")
         }
         
