@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
@@ -20,14 +20,9 @@ import { apiService, Channel } from '@/utils/api';
 
 import styles from '../styles/main-page.module.css';
 
-
-
 export default function GiveawayInterface() {
   const router = useRouter();
-  
-
   const { tgWebAppStartParam } = router.query;
-
 
   const [userID, setUserId] = useState<string>('');
   const [eventID, setEventId] = useState<string>('');
@@ -37,202 +32,168 @@ export default function GiveawayInterface() {
   const [tickets_to_invite, setTikForInv] = useState<number>(0);
 
   const { showToast } = useToast();
-  const [messageCounter, setMessageCounter] = useState(0)
-
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [channels, setChannels] = useState<Channel[]>([]);
-  const [isChecking, setIsChecking] = useState(false);
   const [allSubscribed, setAllSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-
-  // Загрузка начальных данных
-  
+  // Декодирование параметров из URL
   useEffect(() => {
     if (typeof tgWebAppStartParam === 'string') {
       const data = decodeTelegramParams(tgWebAppStartParam);
-      
       if (data) {
-        console.log('Decoded data:', data);
-        // Пример данных: { event_id: "123", mode: "raffle" }
-
-        setEventId(data.event_id)
-        setAction(data.mode)
-        setReferrerId(data?.referrer_id)
-
+        setEventId(data.event_id);
+        setAction(data.mode || '');
+        setReferrerId(data?.referrer_id || '');
       }
     }
+  }, [tgWebAppStartParam]);
 
-  },[tgWebAppStartParam]);
-
-
-  useEffect(() => {
-    const initializeData = async () => {
-      try {
-          const tg = window.Telegram?.WebApp;
-          
-          if (!tg) {
-            throw new Error('Telegram WebApp not available');
-          }
-
-          await tg.ready();
-
-          await tg.expand(); // Растягивает приложение на весь экран
-          
-          const user = tg.initDataUnsafe.user;
-          const TGuserId = user?.id?.toString();
-
-          console.log(user)
-          
-
-          if (!TGuserId) throw new Error('Telegram user ID not found');
-          
-          localStorage.setItem('user_id', TGuserId);
-          
-          const _update = await apiService.SendUserToServer(
-            user?.id?.toString(), 
-            user?.first_name?.toString() + " " + user?.last_name?.toString(),
-            user?.username?.toString())
-          // if (! _update.ok) throw new Error('Failed to update User');
-
-          setUserId(TGuserId);
-          
-        
-  
-      } catch (_error) {
-        console.error('Initialization error:', _error);
-        setError('Ошибка! Запустите приложение в боте @GiveRandomeBot!');
-        setLoading(false);
-      }
-    };
-  
-    initializeData();
-  }, [eventID]); // Зависимость от eventId
-  
-  // Эффект для загрузки данных после инициализации
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      if (!userID || !eventID) return; // Ждем пока данные появятся
+  // Инициализация Telegram WebApp
+  const initializeTelegram = useCallback(async () => {
+    try {
+      const tg = window.Telegram?.WebApp;
+      if (!tg) throw new Error('Telegram WebApp not available');
       
-      try {
-        setLoading(true);
-        const eventData = await apiService.getEventData(eventID) 
-        setCaptcha(eventData.use_captcha)
-        setTikForInv(eventData.users_to_invite)
-        const subscriptionResponse = await apiService.checkSubscriptions(userID, eventID);
-        
-        setChannels(subscriptionResponse.details);
-        setAllSubscribed(subscriptionResponse.allSubscribed);
-        
-      } catch (_err) {
-        console.error(_err);
-        setError('Ошибка загрузки данных');
-      } finally {
-        setLoading(false);
+      await tg.ready();
+      tg.expand();
+
+      const user = tg.initDataUnsafe.user;
+      const TGuserId = user?.id?.toString();
+      if (!TGuserId) throw new Error('Telegram user ID not found');
+      
+      localStorage.setItem('user_id', TGuserId);
+      
+      await apiService.SendUserToServer(
+        TGuserId,
+        `${user?.first_name || ''} ${user?.last_name || ''}`.trim(),
+        user?.username || ''
+      );
+
+      setUserId(TGuserId);
+      return TGuserId;
+    } catch (error) {
+      console.error('Initialization error:', error);
+      setError('Ошибка! Запустите приложение в боте @GiveRandomeBot!');
+      setLoading(false);
+      return null;
+    }
+  }, []);
+
+  // Загрузка данных события
+  const fetchEventData = useCallback(async (userId: string, eventId: string) => {
+    try {
+      const eventData = await apiService.getEventData(eventId);
+      setCaptcha(eventData.use_captcha);
+      setTikForInv(eventData.users_to_invite);
+      
+      const subscriptionResponse = await apiService.checkSubscriptions(userId, eventId);
+      setChannels(subscriptionResponse.details);
+      setAllSubscribed(subscriptionResponse.allSubscribed);
+    } catch (error) {
+      console.error('Error loading event data:', error);
+      setError('Ошибка загрузки данных');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Основной эффект инициализации
+  useEffect(() => {
+    const initialize = async () => {
+      const userId = await initializeTelegram();
+      if (userId && eventID) {
+        await fetchEventData(userId, eventID);
       }
     };
-  
-    fetchInitialData();
-  }, [userID, eventID]); // Срабатывает при изменении userID или eventID
-  
 
-
+    if (eventID) {
+      initialize();
+    }
+  }, [eventID, initializeTelegram, fetchEventData]);
 
   // Проверка подписок
-  const checkSubscriptionsOnSite = async () => {
-    setIsChecking(true);
+  const checkSubscriptions = useCallback(async () => {
+    if (!userID || !eventID) return;
+    
+    setIsProcessing(true);
     try {
-      const result = await apiService.checkSubscriptions(
-        userID,
-        eventID
-      );
-
+      const result = await apiService.checkSubscriptions(userID, eventID);
+      
       const updatedChannels = channels.map(channel => ({
         ...channel,
-        isSubscribed: result.details.find(
-          d => d.channelId === channel.channelId
-        )?.isSubscribed || false
+        isSubscribed: result.details.find(d => d.channelId === channel.channelId)?.isSubscribed || false
       }));
-
+      
       setChannels(updatedChannels);
       setAllSubscribed(result.allSubscribed);
-
-      if (result.allSubscribed) {
-        router.reload();
-      }
-    } catch (_err) {
-      console.error(_err)
+      return result.allSubscribed;
+    } catch (error) {
+      console.error('Subscription check error:', error);
       setError('Ошибка проверки подписок');
+      return false;
     } finally {
-      setIsChecking(false);
+      setIsProcessing(false);
     }
-  };
+  }, [userID, eventID, channels]);
 
-  const checkSubscriptionsOnSiteByReferral = async () => {
-    console.log(messageCounter)
-    setIsChecking(true);
+  // Обработка рефералов
+  const processReferral = useCallback(async () => {
+    if (!userID || !referrer_id || !eventID) return false;
+    
     try {
-      const result = await apiService.checkSubscriptions(
+      const refResponse = await apiService.SendReferralToServer(
         userID,
+        referrer_id,
         eventID
       );
 
-      const updatedChannels = channels.map(channel => ({
-        ...channel,
-        isSubscribed: result.details.find(
-          d => d.channelId === channel.channelId
-        )?.isSubscribed || false
-      }));
+      if (refResponse.ok) {
+        showToast(refResponse.message, "success");
+        return true;
+      } else {
+        showToast(refResponse.message, "error");
+        return false;
+      }
+    } catch (error) {
+      console.error('Referral processing error:', error);
+      showToast('Ошибка обработки реферала', "error");
+      return false;
+    }
+  }, [userID, referrer_id, eventID, showToast]);
 
-      setChannels(updatedChannels);
-      setAllSubscribed(result.allSubscribed);
-
-      if (result.allSubscribed) {
-        const refResponse = await apiService.SendReferralToServer(
-          userID,
-          referrer_id,
-          eventID
-        )
-
-        if (refResponse.ok && (messageCounter < 4) ){
-          showToast(refResponse.message, "success")
-          setMessageCounter(messageCounter+1);
-          router.reload();
-        } else if ((!refResponse.ok) && (messageCounter < 4) ){
-          setMessageCounter(messageCounter+1);
-          showToast(refResponse.message, "error")
-          return;
+  // Эффект для обработки рефералов при загрузке
+  useEffect(() => {
+    const handleReferralAction = async () => {
+      if (action === 'ref' && allSubscribed && !isProcessing) {
+        const success = await processReferral();
+        if (success) {
+          // Обновляем данные вместо перезагрузки страницы
+          const userId = localStorage.getItem('user_id') || userID;
+          if (userId) await fetchEventData(userId, eventID);
         }
-        
       }
-    } catch (_err) {
-      console.error(_err)
-      setError('Ошибка проверки подписок');
-    } finally {
-      setIsChecking(false);
-    }
-  }
+    };
 
-  console.log(`userid=${userID}  eventid=${eventID}`)
+    handleReferralAction();
+  }, [action, allSubscribed, isProcessing, processReferral, fetchEventData, userID, eventID]);
+
+  // Проверка подписок для рефералов
+  const checkSubscriptionsForReferral = useCallback(async () => {
+    const allSubscribed = await checkSubscriptions();
+    if (allSubscribed) {
+      await processReferral();
+    }
+  }, [checkSubscriptions, processReferral]);
 
   if (loading) {
-    let sleep = (ms: number) => new Promise(res=>setTimeout(res,ms));
-    
-    const prepareData = async () => {
-      
-      await sleep(2000);
-      
-    }
-
-    prepareData();
-
     return (
       <div className={styles.loadingContainer}>
         <LoaderSVG />
       </div>
     );
-
   }
 
   if (error) {
@@ -249,209 +210,105 @@ export default function GiveawayInterface() {
     );
   }
 
-  if (action == 'results') {
-    return (
-      <ResultsPage event_id={eventID}/>
-    )
-  } 
+  if (action === 'results') {
+    return <ResultsPage event_id={eventID} />;
+  }
 
-  else if (action=='ref') {
-    console.log(referrer_id, action)
-    if (!allSubscribed) {
-       return (
-          <div className={styles.channelsSection}>
-            <h2>Для участия подпишитесь на все каналы:</h2>
-            
-            {channels.map((channel) => (
-              !channel.isSubscribed && (
-                <motion.div
-                  key={channel.channelId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={styles.channelCard}
-                >
-                  <div className={styles.channelInfo}>
-                      <Image
-                        src={channel.image_data as string}
-                        alt={channel.channelName}
-                        width={80}
-                        height={80}
-                        className={styles.avatar}
-                      />
-                    <h3>{channel.channelName}</h3>
-                  </div>
-                  <a
-                    className={styles.subscribeButton}
-                    target='_blank'
-                    href={channel.channelUrl}
-                  >
-                    {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
-                  </a>
-                </motion.div>
-              )
-            ))}
-            
-            <button
-              onClick={checkSubscriptionsOnSiteByReferral}
-              className={styles.checkButton}
-              disabled={isChecking}
+  // Компонент каналов для подписки
+  const renderChannelsSection = (onCheck: () => void) => (
+    <div className={styles.channelsSection}>
+      <h2>Для участия подпишитесь на все каналы:</h2>
+      
+      {channels.map((channel) => (
+        !channel.isSubscribed && (
+          <motion.div
+            key={channel.channelId}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={styles.channelCard}
+          >
+            <div className={styles.channelInfo}>
+              <Image
+                src={channel.image_data as string}
+                alt={channel.channelName}
+                width={80}
+                height={80}
+                className={styles.avatar}
+              />
+              <h3>{channel.channelName}</h3>
+            </div>
+            <a
+              className={styles.subscribeButton}
+              target='_blank'
+              href={channel.channelUrl}
             >
-              {isChecking ? (
-                <>
-                  <span className={styles.spinner} />
-                  Проверяем...
-                </>
-              ) : (
-                'Проверить подписки'
-              )}
-            </button>
-          </div>
+              {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
+            </a>
+          </motion.div>
         )
-    } else {
-      const checkReferrer = async () => {
-        const refResponse = await apiService.SendReferralToServer(
-            userID,
-            referrer_id,
-            eventID
-          )
-  
-          if (refResponse.ok){
-            showToast(refResponse.message, "success")
-            router.reload();
-          } else {
-            showToast(refResponse.message, "error")
-            return (
-              <div className={styles.errorContainer}>
-                <ErrorMarkSvg />
-                <button 
-                  className={styles.retryButton}
-                  onClick={() => router.reload()}
-                >
-                  Попробовать снова
-                </button>
-              </div>
-            );
-          }
-      }
-      checkReferrer();
-
-      return (
-      <div className={styles.container}>
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className={styles.contentWrapper}
-        >
+      ))}
+      
+      <button
+        onClick={onCheck}
+        className={styles.checkButton}
+        disabled={isProcessing}
+      >
+        {isProcessing ? (
           <>
-              <Checkmark />
-              <div className={styles.headerSection}>
-                <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
-                <div className={styles.warningBox}>
-                  ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
-                </div>
-                <RaffleTimer event_id={eventID} />
-                <div className={styles.subTitle}>До завершения</div>
-              </div>
-              
-              <InviteSection users_to_invite={tickets_to_invite} event_id={eventID}/>
-              
-              <Tickets event_id={eventID}/>
-          
+            <span className={styles.spinner} />
+            Проверяем...
           </>
-        </motion.div>
-      </div>
+        ) : (
+          'Проверить подписки'
+        )}
+      </button>
+    </div>
   );
-    }
-  }
 
-  if (useCaptcha==1) {
-    return (
-      <Captcha 
-        onSuccess={() => setCaptcha(0)}
-        fetchCaptcha={async () => {
-          // Пример реализации запроса капчи
-          const response = await apiService.getCaptcha();
-          return response;
-        }}
-      />
-    )
-  }
-
-  return (
+  // Основной интерфейс розыгрыша
+  const renderMainInterface = () => (
     <div className={styles.container}>
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className={styles.contentWrapper}
       >
-
-        {allSubscribed ? (
-          <>
-            <Checkmark />
-            <div className={styles.headerSection}>
-              <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
-              <div className={styles.warningBox}>
-                ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
-              </div>
-              <RaffleTimer event_id={eventID} />
-              <div className={styles.subTitle}>До завершения</div>
-            </div>
-            
-            <InviteSection users_to_invite={tickets_to_invite} event_id={eventID}/>
-            
-            <Tickets event_id={eventID}/>
-         
-          </>
-        ) : (
-          <div className={styles.channelsSection}>
-            <h2>Для участия подпишитесь на все каналы:</h2>
-            
-            {channels.map((channel) => (
-              !channel.isSubscribed && (
-                <motion.div
-                  key={channel.channelId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={styles.channelCard}
-                >
-                  <div className={styles.channelInfo}>
-                      <Image
-                        src={channel.image_data as string}
-                        alt={channel.channelName}
-                        width={80}
-                        height={80}
-                        className={styles.avatar}
-                      />
-                    <h3>{channel.channelName}</h3>
-                  </div>
-                  <a
-                    className={styles.subscribeButton}
-                    target='_blank'
-                    href={channel.channelUrl}
-                  >
-                    {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
-                  </a>
-                </motion.div>
-              )
-            ))}
-            
-            <button
-              onClick={checkSubscriptionsOnSite}
-              className={styles.checkButton}
-              disabled={isChecking}
-            >
-              {isChecking ? (
-                <>
-                  <span className={styles.spinner} />
-                  Проверяем...
-                </>
-              ) : (
-                'Проверить подписки'
-              )}
-            </button>
+        <Checkmark />
+        <div className={styles.headerSection}>
+          <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
+          <div className={styles.warningBox}>
+            ⚠️ Не отписывайтесь от каналов до окончания розыгрыша
           </div>
-        )}
+          <RaffleTimer event_id={eventID} />
+          <div className={styles.subTitle}>До завершения</div>
+        </div>
+        
+        <InviteSection 
+          users_to_invite={tickets_to_invite} 
+          event_id={eventID}
+        />
+        
+        <Tickets event_id={eventID} />
       </motion.div>
     </div>
   );
+
+  if (useCaptcha === 1) {
+    return (
+      <Captcha 
+        onSuccess={() => setCaptcha(0)}
+        fetchCaptcha={apiService.getCaptcha}
+      />
+    );
+  }
+
+  if (action === 'ref') {
+    return allSubscribed 
+      ? renderMainInterface()
+      : renderChannelsSection(checkSubscriptionsForReferral);
+  }
+
+  return allSubscribed 
+    ? renderMainInterface()
+    : renderChannelsSection(checkSubscriptions);
 }

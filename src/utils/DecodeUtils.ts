@@ -25,4 +25,5 @@ export const decodeTelegramParams = (encodedParams: string) => {
       console.error('Decoding error:', error);
       return null;
     }
-  };
+};
+
