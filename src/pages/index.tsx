@@ -33,7 +33,7 @@ export default function GiveawayInterface() {
 
   const { showToast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isReferralProcessed, setIsReferralProcessed] = useState(true);
+  const [isReferralProcessed, setIsReferralProcessed] = useState(false);
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -144,7 +144,7 @@ export default function GiveawayInterface() {
   // Обработка рефералов
   const processReferral = useCallback(async () => {
     if (!userID && !referrer_id && !eventID || isReferralProcessed) return false;
-    if (isReferralProcessed){
+    if (!isReferralProcessed){
 
       setIsReferralProcessed(true); // Помечаем как обработанное
       console.log('start:->', isReferralProcessed);
@@ -172,7 +172,7 @@ export default function GiveawayInterface() {
       } finally {
         // Сбрасываем флаг обработки при неудаче для повторной попытки
         console.log('end:->', isReferralProcessed);
-        setIsReferralProcessed(false);
+        setIsReferralProcessed(true);
       }
     }
   }, [userID, referrer_id, eventID, showToast, isReferralProcessed]);
