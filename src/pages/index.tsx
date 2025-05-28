@@ -155,9 +155,11 @@ export default function GiveawayInterface() {
 
       if (refResponse.ok) {
         showToast(refResponse.message, "success");
+      setIsReferralProcessed(false);
         return true;
       } else {
         showToast(refResponse.message, "error");
+      setIsReferralProcessed(false);
         return false;
       }
     } catch (error) {
