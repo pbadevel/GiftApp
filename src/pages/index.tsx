@@ -171,7 +171,7 @@ export default function GiveawayInterface() {
       // Сбрасываем флаг обработки при неудаче для повторной попытки
       setIsReferralProcessed(false);
     }
-    console.log('end:->', isReferralProcessed)
+    console.log('end:->', isReferralProcessed);
   }, [userID, referrer_id, eventID, showToast, isReferralProcessed]);
 
   // Эффект для обработки рефералов при загрузке
