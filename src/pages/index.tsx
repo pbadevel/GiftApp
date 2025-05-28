@@ -201,6 +201,7 @@ export default function GiveawayInterface() {
         } else if ((!refResponse.ok) && (messageCounter < 4) ){
           setMessageCounter(messageCounter+1);
           showToast(refResponse.message, "error")
+          return;
         }
         
       }
