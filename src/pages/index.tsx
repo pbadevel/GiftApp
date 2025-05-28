@@ -196,8 +196,10 @@ export default function GiveawayInterface() {
 
         if (refResponse.ok && (messageCounter < 4) ){
           showToast(refResponse.message, "success")
+          setMessageCounter(messageCounter+1);
           router.reload();
         } else if ((!refResponse.ok) && (messageCounter < 4) ){
+          setMessageCounter(messageCounter+1);
           showToast(refResponse.message, "error")
         }
         
