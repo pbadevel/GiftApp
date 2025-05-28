@@ -33,7 +33,7 @@ export default function GiveawayInterface() {
 
   const { showToast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isReferralProcessed, setIsReferralProcessed] = useState(false);
+  const [isReferralProcessed, setIsReferralProcessed] = useState(true);
 
 
   const [channels, setChannels] = useState<Channel[]>([]);
