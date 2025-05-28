@@ -33,6 +33,8 @@ export default function GiveawayInterface() {
 
   const { showToast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isReferralProcessed, setIsReferralProcessed] = useState(false);
+
 
   const [channels, setChannels] = useState<Channel[]>([]);
   const [allSubscribed, setAllSubscribed] = useState(false);
@@ -141,8 +143,9 @@ export default function GiveawayInterface() {
 
   // Обработка рефералов
   const processReferral = useCallback(async () => {
-    if (!userID || !referrer_id || !eventID) return false;
+    if (!userID || !referrer_id || !eventID || isReferralProcessed) return false;
     
+    setIsReferralProcessed(true); // Помечаем как обработанное
     try {
       const refResponse = await apiService.SendReferralToServer(
         userID,
@@ -161,25 +164,41 @@ export default function GiveawayInterface() {
       console.error('Referral processing error:', error);
       showToast('Ошибка обработки реферала', "error");
       return false;
+    } finally {
+      // Сбрасываем флаг обработки при неудаче для повторной попытки
+      setIsReferralProcessed(false);
     }
-  }, [userID, referrer_id, eventID, showToast]);
+  }, [userID, referrer_id, eventID, showToast, isReferralProcessed]);
 
   // Эффект для обработки рефералов при загрузке
   useEffect(() => {
     const handleReferralAction = async () => {
-      if (action === 'ref' && allSubscribed && !isProcessing) {
+      if (action === 'ref' && allSubscribed && !isProcessing && !isReferralProcessed) {
         const success = await processReferral();
         if (success) {
           // Обновляем данные вместо перезагрузки страницы
           const userId = localStorage.getItem('user_id') || userID;
-          if (userId) await fetchEventData(userId, eventID);
+          if (userId) {
+            try {
+              setLoading(true);
+              const eventData = await apiService.getEventData(eventID);
+              setTikForInv(eventData.users_to_invite);
+              
+              const subscriptionResponse = await apiService.checkSubscriptions(userId, eventID);
+              setChannels(subscriptionResponse.details);
+              setAllSubscribed(subscriptionResponse.allSubscribed);
+            } catch (error) {
+              console.error('Error updating data:', error);
+            } finally {
+              setLoading(false);
+            }
+          }
         }
       }
     };
 
     handleReferralAction();
-  }, [action, allSubscribed, isProcessing, processReferral, fetchEventData, userID, eventID]);
-
+  }, [action, allSubscribed, isProcessing, processReferral, userID, eventID, isReferralProcessed]);
   // Проверка подписок для рефералов
   const checkSubscriptionsForReferral = useCallback(async () => {
     const allSubscribed = await checkSubscriptions();
@@ -277,7 +296,7 @@ export default function GiveawayInterface() {
         <div className={styles.headerSection}>
           <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
           <div className={styles.warningBox}>
-            ⚠️ Не отписывайтесь от каналов до окончания розыгрыша
+            ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
           </div>
           <RaffleTimer event_id={eventID} />
           <div className={styles.subTitle}>До завершения</div>
