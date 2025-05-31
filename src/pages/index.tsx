@@ -63,16 +63,22 @@ export default function GiveawayInterface() {
       tg.expand();
 
       const user = tg.initDataUnsafe.user;
-      const TGuserId = user?.id?.toString();
+      const TGuserId = user.id.toString();
       if (!TGuserId) throw new Error('Telegram user ID not found');
       
       localStorage.setItem('user_id', TGuserId);
       
-      await apiService.SendUserToServer(
+      const resp = await apiService.SendUserToServer(
         TGuserId,
-        `${user?.first_name || ''} ${user?.last_name || ''}`.trim(),
-        user?.username || ''
+        `${user.first_name || ''} ${user.last_name || ''}`.trim(),
+        user.username || ''
       );
+
+      if (!resp.ok) {
+        router.reload()  
+      }
+
+
 
       setUserId(TGuserId);
       return TGuserId;
