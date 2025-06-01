@@ -386,3 +386,95 @@
     padding: 50px;
     font-size: 1.2rem;
   }
+
+
+
+
+
+
+
+
+.title {
+  color: #525252;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.channelCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.channelCard:hover {
+  background: #fafafa;
+}
+
+.channelInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.channelName {
+  font-weight: 500;
+  color: #171717;
+}
+
+.subscribeButton {
+  font-size: 0.75rem;
+  background: black;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  transition: background 0.2s;
+}
+
+.subscribeButton:hover {
+  background: #262626;
+}
+
+.checkButton {
+  width: 100%;
+  padding: 0.75rem;
+  background: #171717;
+  color: white;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  transition: background 0.2s;
+}
+
+.checkButton:hover:not(:disabled) {
+  background: black;
+}
+
+.checkButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

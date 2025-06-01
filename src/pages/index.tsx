@@ -248,14 +248,15 @@ export default function GiveawayInterface() {
 
   // Компонент каналов для подписки
   const renderChannelsSection = (onCheck: () => void) => (
-    <div className={styles.channelsSection}>
-      <h2>Для участия подпишитесь на все каналы:</h2>
-      
+  <div className={styles.container}>
+    <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
+    
+    <div className={styles.channelsList}>
       {channels.map((channel) => (
         !channel.isSubscribed && (
           <motion.div
             key={channel.channelId}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className={styles.channelCard}
           >
@@ -263,39 +264,41 @@ export default function GiveawayInterface() {
               <Image
                 src={channel.image_data as string}
                 alt={channel.channelName}
-                width={80}
-                height={80}
+                width={32}
+                height={32}
                 className={styles.avatar}
               />
-              <h3>{channel.channelName}</h3>
+              <span className={styles.channelName}>{channel.channelName}</span>
             </div>
             <a
               className={styles.subscribeButton}
-              target='_blank'
+              target="_blank"
+              rel="noopener noreferrer"
               href={channel.channelUrl}
             >
-              {channel.isSubscribed ? '✓ Подписан' : 'Подписаться'}
+              Подписаться
             </a>
           </motion.div>
         )
       ))}
-      
-      <button
-        onClick={onCheck}
-        className={styles.checkButton}
-        disabled={isProcessing}
-      >
-        {isProcessing ? (
-          <>
-            <span className={styles.spinner} />
-            Проверяем...
-          </>
-        ) : (
-          'Проверить подписки'
-        )}
-      </button>
     </div>
-  );
+    
+    <button
+      onClick={onCheck}
+      className={styles.checkButton}
+      disabled={isProcessing}
+    >
+      {isProcessing ? (
+        <span>
+          <span className={styles.spinner} />
+          Проверяем...
+        </span>
+      ) : (
+        'Проверить подписки'
+      )}
+    </button>
+  </div>
+);
 
   // Основной интерфейс розыгрыша
   const renderMainInterface = () => (
