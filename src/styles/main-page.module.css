@@ -80,7 +80,8 @@
   }
   
   .inviteSection {
-    box-shadow: 0 0 10px 0 rgba(0, 167, 145, 0);
+    /* box-shadow: 0 0 10px 0 rgba(0, 167, 145, 0); */
+    border: 2px solid #000000;
     background-color: #ffffff;
     padding: 0.9rem;
     border-radius: 1rem;
@@ -147,7 +148,7 @@
     background-color: #ffffff;
     padding: 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0 10px 0 rgb(0, 167, 146);
+    box-shadow: 0 0 3px 0 rgb(0, 167, 146);
 
   }
   
@@ -547,7 +548,7 @@
 
 .ticketCard {
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 12px;
   text-align: left;
 }
