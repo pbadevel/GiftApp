@@ -301,34 +301,32 @@ export default function GiveawayInterface() {
 );
 
   // Основной интерфейс розыгрыша
-  // index.tsx
-const renderMainInterface = () => (
-  <div className={styles.telegramContainer}>
-    <div className={styles.header}>
-      <Checkmark />
-      <h1 className={styles.title}>Вы участвуете в розыгрыше!</h1>
-      <div className={styles.warning}>
-        ⚠️ Не отписывайтесь от каналов до окончания розыгрыша
-      </div>
+  const renderMainInterface = () => (
+    <div className={styles.container}>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className={styles.contentWrapper}
+      >
+        <Checkmark />
+        <div className={styles.headerSection}>
+          <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
+          <div className={styles.warningBox}>
+            ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
+          </div>
+          <RaffleTimer event_id={eventID} />
+          <div className={styles.subTitle}>До завершения</div>
+        </div>
+        
+        <InviteSection 
+          users_to_invite={tickets_to_invite} 
+          event_id={eventID}
+        />
+        
+        <Tickets event_id={eventID} />
+      </motion.div>
     </div>
-
-    <div className={styles.timerSection}>
-      <RaffleTimer event_id={eventID} />
-      <div className={styles.subtitle}>До завершения</div>
-    </div>
-
-    <div className={styles.card}>
-      <InviteSection 
-        users_to_invite={tickets_to_invite} 
-        event_id={eventID}
-      />
-    </div>
-
-    <div className={styles.card}>
-      <Tickets event_id={eventID} />
-    </div>
-  </div>
-);
+  );
 
   if (useCaptcha === 1) {
     return (
