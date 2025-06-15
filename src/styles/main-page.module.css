@@ -131,7 +131,7 @@
   }
   
   .ticketsSection {
-    box-shadow: 0 0 10px 0 rgb(0, 167, 146);
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0);
     background-color: #ffffff;
     padding: 1rem;
     border-radius: 1rem;
@@ -539,11 +539,11 @@
 }
 
 /* Tickets component */
-.ticketsList {
+/* .ticketsList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 12px;
-}
+} */
 
 .ticketCard {
   background: #f8f9fa;
@@ -583,6 +583,7 @@
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 14px;
+  background-color: #337b91;
 }
 
 .copyButton {
