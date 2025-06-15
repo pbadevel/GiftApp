@@ -478,3 +478,118 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+
+
+
+
+
+
+
+/* main-page.module.css */
+.telegramContainer {
+  background: #f3f4f8;
+  min-height: 100vh;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 12px 0;
+  color: #000;
+}
+
+.warning {
+  background: #fff4d5;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #5c4200;
+  border-left: 3px solid #f59e0b;
+}
+
+.timerSection {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.subtitle {
+  color: #707579;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Tickets component */
+.ticketsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.ticketCard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.ticketNumber {
+  font-weight: 700;
+  font-size: 16px;
+  color: #000;
+}
+
+.ticketDate {
+  font-size: 12px;
+  color: #707579;
+}
+
+/* InviteSection */
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.referralBox {
+  display: flex;
+  gap: 8px;
+}
+
+.referralInput {
+  flex: 1;
+  background: #f8f9fa;
+  border: 1px solid #e1e3e6;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.copyButton {
+  background: #2eaddc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  cursor: pointer;
+}
