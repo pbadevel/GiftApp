@@ -12,6 +12,7 @@ import InviteSection from '@/components/InviteUser';
 import LoaderSVG from '@/components/Loader';
 import Captcha from '@/components/Captcha';
 import ErrorMarkSvg from '@/components/ErrorMark';
+import NoChannelsVideo from '@/components/NoSubscribedMark';
 
 import ResultsPage from './results';
 
@@ -267,6 +268,7 @@ export default function GiveawayInterface() {
     // Компонент каналов для подписки
     const renderChannelsSection = (onCheck: () => void) => (
     <div className={styles.container}>
+      <NoChannelsVideo />
       <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
       
       <div className={styles.channelsList}>
