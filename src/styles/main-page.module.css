@@ -278,7 +278,7 @@
     align-items: center;
     padding: 1.5rem;
     margin: 1rem 0;
-    background: #1f2937;
+    background: #2c4d7a;
     border-radius: 8px;
     gap: 1.5rem; /* Добавляем промежуток между элементами */
   }
@@ -411,9 +411,7 @@
   transition: background 0.2s;
 }
 
-.channelCard:hover {
-  background: #fafafa;
-}
+
 
 .channelInfo {
   display: flex;
