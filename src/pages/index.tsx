@@ -194,6 +194,13 @@ export default function GiveawayInterface() {
           if (userId) {
             try {
               setLoading(true);
+              
+              const timer = setTimeout(() => {
+                setLoading(true);
+              }, 5000);
+
+              clearTimeout(timer);
+              
               const eventData = await apiService.getEventData(eventID);
               setTikForInv(eventData.users_to_invite);
               
