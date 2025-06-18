@@ -24,61 +24,43 @@ const LoaderSVG = () => {
   }, []);
 
   return (
-    <>
-    
-    <video 
-      ref={videoRef}
-      width="320" 
-      height="240" 
-      muted
-      playsInline
-      loop
-      preload="auto"
-    >
-      <source src="/loader.mp4" type="video/mp4" />
-      Ваш браузер не поддерживает видео тег.
-    </video>
-    <br />
-    <p>Идет проверка подписок ...</p>
-    </>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '20px'
+    }}>
+      <video 
+        ref={videoRef}
+        width="320" 
+        height="240" 
+        muted
+        playsInline
+        loop
+        preload="auto"
+        style={{
+          borderRadius: '12px',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+        }}
+      >
+        <source src="/loader.mp4" type="video/mp4" />
+        Ваш браузер не поддерживает видео тег.
+      </video>
+      
+      <p style={{
+        fontSize: '18px',
+        fontWeight: 500,
+        color: '#555',
+        textAlign: 'center',
+        maxWidth: '320px'
+      }}>
+        Подождите, идет проверка подписок...
+      </p>
+    </div>
   )
 }
 
 export default LoaderSVG;
-
-
-
-
-
-
-// const LoaderSVG = () => {
-//   return (  
-//     <>
-//       <Image 
-//           src="/loader.webp"
-//           alt=''
-//           width="350"
-//           height="250"
-          
-//       />
-//       <br />
-//       <p style={{ fontSize: "15px" }}>Идет проверка...</p>  
-//     </>  
-//   );
-// }
-
-// const LoaderSVG = () => {
-//   return (
-//     <video width="320" height="240" controls preload="none">
-//       <source src="/loader.mp4" type="video/mp4" />
-//     </video>
-//   )
-// }
-
-
-// export default LoaderSVG;
-
-
-
 
 
