@@ -183,6 +183,17 @@ export default function GiveawayInterface() {
     }
   }, [userID, referrer_id, eventID, showToast, isReferralProcessed]);
 
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+
   // Эффект для обработки рефералов при загрузке
   useEffect(() => {
     const handleReferralAction = async () => {
@@ -193,13 +204,6 @@ export default function GiveawayInterface() {
           const userId = localStorage.getItem('user_id') || userID;
           if (userId) {
             try {
-              setLoading(true);
-              
-              const timer = setTimeout(() => {
-                setLoading(true);
-              }, 5000);
-
-              clearTimeout(timer);
               
               const eventData = await apiService.getEventData(eventID);
               setTikForInv(eventData.users_to_invite);
