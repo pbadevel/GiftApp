@@ -268,7 +268,17 @@ export default function GiveawayInterface() {
     // Компонент каналов для подписки
     const renderChannelsSection = (onCheck: () => void) => (
     <div className={styles.container}>
+      <div style={
+        {
+          display: "flex",
+          alignItems: 'center'
+          
+        }
+      }>
+
       <NoChannelsVideo />
+
+      </div>
       <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
       
       <div className={styles.channelsList}>
