@@ -47,7 +47,10 @@ export default function GiveawayInterface() {
       setLoading(true);
     }, 5000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer)
+      setLoading(false);
+    };
   }, []);
 
   // Декодирование параметров из URL
@@ -94,7 +97,7 @@ export default function GiveawayInterface() {
     } catch (error) {
       console.error('Initialization error:', error);
       setError('Ошибка! Запустите приложение в боте @GiveRandomeBot!');
-      setLoading(false);
+      // setLoading(false);
       return null;
     }
   }, []);
@@ -113,7 +116,7 @@ export default function GiveawayInterface() {
       console.error('Error loading event data:', error);
       setError('Ошибка загрузки данных');
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }, []);
 
@@ -216,7 +219,7 @@ export default function GiveawayInterface() {
             } catch (error) {
               console.error('Error updating data:', error);
             } finally {
-              setLoading(false);
+              // setLoading(false);
             }
           }
         }
