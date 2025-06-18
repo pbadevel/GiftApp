@@ -270,13 +270,16 @@ export default function GiveawayInterface() {
     <div className={styles.container}>
       <div style={
         {
-          display: "flex",
-          alignItems: 'center'
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '20px'
           
         }
       }>
 
-      <NoChannelsVideo />
+        <NoChannelsVideo />
 
       </div>
       <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
