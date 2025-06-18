@@ -32,7 +32,7 @@
   }
   
   .title {
-    font-size: 2.1rem;
+    font-size: 1.7rem;
     margin-bottom: 2rem;
   }
   
@@ -40,7 +40,7 @@
     max-width: 800px;
     margin: 0 auto;
     background-color: #75747449;
-    box-shadow: 20px 20px 10px 0px #00000049;
+    box-shadow: 20px 20px 10px 0px #00000000;
     border-radius: 10px;
   }
   
@@ -49,9 +49,9 @@
     align-items: center;
     padding: 1.2rem;
     margin: 0.8rem 0;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255, 255, 255);
     border-radius: 10px;
-    backdrop-filter: blur(5px);
+    border-color: solid rgb(6, 149, 231);
   }
   
   .avatar {
