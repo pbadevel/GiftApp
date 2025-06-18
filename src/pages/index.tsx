@@ -41,6 +41,15 @@ export default function GiveawayInterface() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Декодирование параметров из URL
   useEffect(() => {
     if (typeof tgWebAppStartParam === 'string') {
@@ -185,13 +194,6 @@ export default function GiveawayInterface() {
 
 
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(true);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
 
   // Эффект для обработки рефералов при загрузке
