@@ -14,6 +14,7 @@ const LoaderSVG = () => {
           height="250"
           
       />
+      <br />
       <p style={{ fontSize: "15px" }}>Идет проверка...</p>  
     </>  
   );
