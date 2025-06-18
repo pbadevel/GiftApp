@@ -24,6 +24,8 @@ const LoaderSVG = () => {
   }, []);
 
   return (
+    <>
+    
     <video 
       ref={videoRef}
       width="320" 
@@ -36,6 +38,9 @@ const LoaderSVG = () => {
       <source src="/loader.mp4" type="video/mp4" />
       Ваш браузер не поддерживает видео тег.
     </video>
+    <br />
+    <p>Идет проверка подписок ...</p>
+    </>
   )
 }
 
