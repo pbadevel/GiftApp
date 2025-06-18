@@ -39,18 +39,18 @@ export default function GiveawayInterface() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [allSubscribed, setAllSubscribed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   const [error, setError] = useState('');
 
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(true);
+    // Устанавливаем таймер на 5 секунд для скрытия лоадера
+    const loaderTimer = setTimeout(() => {
+      setShowLoader(false);
     }, 5000);
 
-    return () => {
-      clearTimeout(timer)
-      setLoading(false);
-    };
+    // Очищаем таймер при размонтировании компонента
+    return () => clearTimeout(loaderTimer);
   }, []);
 
   // Декодирование параметров из URL
@@ -236,7 +236,7 @@ export default function GiveawayInterface() {
     }
   }, [checkSubscriptions, processReferral]);
 
-  if (loading) {
+  if (showLoader) {
     return (
       <div className={styles.loadingContainer}>
         <LoaderSVG />
@@ -244,122 +244,125 @@ export default function GiveawayInterface() {
     );
   }
 
-  if (error) {
-    return (
-      <div className={styles.errorContainer}>
-        <div className={styles.errorText}>{error}</div>
-        <button 
-          className={styles.retryButton}
-          onClick={() => router.reload()}
-        >
-          Попробовать снова
-        </button>
-      </div>
-    );
-  }
+  else {
 
-  if (action === 'results') {
-    return <ResultsPage event_id={eventID} />;
-  }
-
-  // Компонент каналов для подписки
-  const renderChannelsSection = (onCheck: () => void) => (
-  <div className={styles.container}>
-    <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
-    
-    <div className={styles.channelsList}>
-      {channels.map((channel) => (
-        !channel.isSubscribed && (
-          <motion.div
-            key={channel.channelId}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={styles.channelCard}
+    if (error) {
+      return (
+        <div className={styles.errorContainer}>
+          <div className={styles.errorText}>{error}</div>
+          <button 
+            className={styles.retryButton}
+            onClick={() => router.reload()}
           >
-            <div className={styles.channelInfo}>
-              <Image
-                src={channel.image_data as string}
-                alt={channel.channelName}
-                width={32}
-                height={32}
-                className={styles.avatar}
-              />
-              <span className={styles.channelName}>{channel.channelName}</span>
-            </div>
-            <a
-              className={styles.subscribeButton}
-              target="_blank"
-              rel="noopener noreferrer"
-              href={channel.channelUrl}
-            >
-              Подписаться
-            </a>
-          </motion.div>
-        )
-      ))}
-    </div>
-    
-    <button
-      onClick={onCheck}
-      className={styles.checkButton}
-      disabled={isProcessing}
-    >
-      {isProcessing ? (
-        <span>
-          <span className={styles.spinner} />
-          Проверяем...
-        </span>
-      ) : (
-        'Проверить подписки'
-      )}
-    </button>
-  </div>
-);
-
-  // Основной интерфейс розыгрыша
-  const renderMainInterface = () => (
-    <div className={styles.container}>
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className={styles.contentWrapper}
-      >
-        <Checkmark />
-        <div className={styles.headerSection}>
-          <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
-          <div className={styles.warningBox}>
-            ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
-          </div>
-          <RaffleTimer event_id={eventID} />
-          <div className={styles.subTitle}>До завершения</div>
+            Попробовать снова
+          </button>
         </div>
-        
-        <InviteSection 
-          users_to_invite={tickets_to_invite} 
-          event_id={eventID}
-        />
-        
-        <Tickets event_id={eventID} />
-      </motion.div>
+      );
+    }
+  
+    if (action === 'results') {
+      return <ResultsPage event_id={eventID} />;
+    }
+  
+    // Компонент каналов для подписки
+    const renderChannelsSection = (onCheck: () => void) => (
+    <div className={styles.container}>
+      <h2 className={styles.title}>Для участия подпишитесь на все каналы:</h2>
+      
+      <div className={styles.channelsList}>
+        {channels.map((channel) => (
+          !channel.isSubscribed && (
+            <motion.div
+              key={channel.channelId}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={styles.channelCard}
+            >
+              <div className={styles.channelInfo}>
+                <Image
+                  src={channel.image_data as string}
+                  alt={channel.channelName}
+                  width={32}
+                  height={32}
+                  className={styles.avatar}
+                />
+                <span className={styles.channelName}>{channel.channelName}</span>
+              </div>
+              <a
+                className={styles.subscribeButton}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={channel.channelUrl}
+              >
+                Подписаться
+              </a>
+            </motion.div>
+          )
+        ))}
+      </div>
+      
+      <button
+        onClick={onCheck}
+        className={styles.checkButton}
+        disabled={isProcessing}
+      >
+        {isProcessing ? (
+          <span>
+            <span className={styles.spinner} />
+            Проверяем...
+          </span>
+        ) : (
+          'Проверить подписки'
+        )}
+      </button>
     </div>
   );
-
-  if (useCaptcha === 1) {
-    return (
-      <Captcha 
-        onSuccess={() => setCaptcha(0)}
-        fetchCaptcha={apiService.getCaptcha}
-      />
+  
+    // Основной интерфейс розыгрыша
+    const renderMainInterface = () => (
+      <div className={styles.container}>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={styles.contentWrapper}
+        >
+          <Checkmark />
+          <div className={styles.headerSection}>
+            <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
+            <div className={styles.warningBox}>
+              ⚠️ Не отписывайтесь от каналов до окончания розыгрыша, при определении победителя бот повторно проверяет подписку на каналы!
+            </div>
+            <RaffleTimer event_id={eventID} />
+            <div className={styles.subTitle}>До завершения</div>
+          </div>
+          
+          <InviteSection 
+            users_to_invite={tickets_to_invite} 
+            event_id={eventID}
+          />
+          
+          <Tickets event_id={eventID} />
+        </motion.div>
+      </div>
     );
-  }
-
-  if (action === 'ref') {
+  
+    if (useCaptcha === 1) {
+      return (
+        <Captcha 
+          onSuccess={() => setCaptcha(0)}
+          fetchCaptcha={apiService.getCaptcha}
+        />
+      );
+    }
+  
+    if (action === 'ref') {
+      return allSubscribed 
+        ? renderMainInterface()
+        : renderChannelsSection(checkSubscriptionsForReferral);
+    }
+  
     return allSubscribed 
       ? renderMainInterface()
-      : renderChannelsSection(checkSubscriptionsForReferral);
+      : renderChannelsSection(checkSubscriptions);
   }
-
-  return allSubscribed 
-    ? renderMainInterface()
-    : renderChannelsSection(checkSubscriptions);
 }
