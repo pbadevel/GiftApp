@@ -23,8 +23,9 @@ const Checkmark = () => {
     playVideo();
   }, [videoEnded]);
 
-  const handleVideoEnd = () => {
-    setVideoEnded(true);
+  const handleVideoEnd = async () => {
+    videoRef.current?.pause()
+    // setVideoEnded(true);
   };
 
   return (
@@ -35,8 +36,7 @@ const Checkmark = () => {
       justifyContent: 'center',
       gap: '20px'
     }}>
-      {!videoEnded && (
-        <video 
+      <video 
           ref={videoRef}
           width="320" 
           height="240" 
@@ -52,7 +52,7 @@ const Checkmark = () => {
           <source src="/CheckMark.mp4" type="video/mp4" />
           Ваш браузер не поддерживает видео тег.
         </video>
-      )}
+      
     </div>
   )
 }
