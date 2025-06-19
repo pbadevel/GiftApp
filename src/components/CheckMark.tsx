@@ -46,8 +46,7 @@ const Checkmark = () => {
           onEnded={handleVideoEnd}
           style={{
             borderRadius: '12px',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-            display: videoEnded ? 'none' : 'block'
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0)'
           }}
         >
           <source src="/CheckMark.mp4" type="video/mp4" />
