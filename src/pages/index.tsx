@@ -341,12 +341,6 @@ export default function GiveawayInterface() {
           animate={{ opacity: 1 }}
           className={styles.contentWrapper}
         >
-          {
-              useCaptcha === 1 && <Captcha 
-              onSuccess={() => setCaptcha(0)}
-              fetchCaptcha={apiService.getCaptcha}
-              />
-          }  
           <Checkmark />
           <div className={styles.headerSection}>
             <h1 className={styles.mainTitle}>Вы участвуете в розыгрыше!</h1>
@@ -367,11 +361,14 @@ export default function GiveawayInterface() {
       </div>
     );
   
-    // if (useCaptcha === 1) {
-    //   return (
-        
-    //   );
-    // }
+    if (useCaptcha === 1) {
+      return (
+        <Captcha 
+          onSuccess={() => setCaptcha(0)}
+          fetchCaptcha={apiService.getCaptcha}
+        />
+      );
+    }
   
     if (action === 'ref') {
       return allSubscribed 
