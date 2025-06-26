@@ -67,29 +67,32 @@ const Captcha = ({ onSuccess, fetchCaptcha }: CaptchaProps) => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>Подтвердите, что вы не робот</div>
-      
-      {captcha?.image && (
-        <img 
-          src={captcha.image} 
-          alt="Captcha" 
-          className={styles.captchaImage}
-        />
-      )}
+    <>
+    
+      <div className={styles.container}>
+        <div className={styles.title}>Подтвердите, что вы не робот</div>
+        
+        {captcha?.image && (
+          <img 
+            src={captcha.image} 
+            alt="Captcha" 
+            className={styles.captchaImage}
+          />
+        )}
 
-      <div className={styles.buttonsContainer}>
-        {captcha?.answers.map((answer, index) => (
-          <button
-            key={index}
-            onClick={() => handleAnswer(answer)}
-            className={styles.answerButton}
-          >
-            {answer}
-          </button>
-        ))}
+        <div className={styles.buttonsContainer}>
+          {captcha?.answers.map((answer, index) => (
+            <button
+              key={index}
+              onClick={() => handleAnswer(answer)}
+              className={styles.answerButton}
+            >
+              {answer}
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
